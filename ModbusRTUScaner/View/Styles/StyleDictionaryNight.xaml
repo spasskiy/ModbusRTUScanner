@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ModbusMonitor.Model">
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="Black"/>
+    <SolidColorBrush x:Key="ForegroundBrush" Color="Gold"/>
+    <SolidColorBrush x:Key="MainBackgroundBrush" Color="Gray"/>
+    <SolidColorBrush x:Key="TextBrush" Color="White"/>
+    <SolidColorBrush x:Key="InputTextBackgroundBrush" Color="Gray"/>
+    <SolidColorBrush x:Key="InactiveButton" Color="Gray"/>
+    <SolidColorBrush x:Key="InactiveText" Color="Gray"/>
+    <SolidColorBrush x:Key="ButtonUderMouse" Color="Gray"/>
+    <SolidColorBrush x:Key="TextButtonUderMouse" Color="Gray"/>
+
+    <!-- Фон строк регистров -->
+    <SolidColorBrush x:Key="InputRegisterBackground" Color="#440000"/>
+    <SolidColorBrush x:Key="HoldingRegisterBackground" Color="#004444"/>
+    <SolidColorBrush x:Key="CoilBackground" Color="#444400"/>
+    <SolidColorBrush x:Key="DiscreteInputBackground" Color="#440044"/>
+
+</ResourceDictionary>

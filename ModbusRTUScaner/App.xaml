@@ -1,0 +1,20 @@
+﻿<Application x:Class="ModbusRTUScanner.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ModbusRTUScanner"
+             StartupUri="View\MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <FontFamily x:Key="FlightCorps3DItalic">pack://application:,,,/Resources/Fonts/flightcorps3dital.ttf#Flight Corps 3D Italic</FontFamily>
+            <FontFamily x:Key="MetronautsSuperItal">pack://application:,,,/Resources/Fonts/metronautssuperital.otf#Metronauts Super</FontFamily>
+            <FontFamily x:Key="Jeremiah">pack://application:,,,/Resources/Fonts/JРІrРІmiah.ttf#Jeremiah</FontFamily>
+            <FontFamily x:Key="A25Kamadjaja">pack://application:,,,/Resources/Fonts/A25Kamadjaja.otf#A25-KAMADJAJA</FontFamily>
+            <FontFamily x:Key="Pistoleer">pack://application:,,,/Resources/Fonts/pistoleersemital.ttf#Pistoleer Semi</FontFamily>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="View/Styles/StyleDictionaryDay.xaml"/>
+                <ResourceDictionary Source="View/Styles/MainDictionary.xaml"/>
+                <ResourceDictionary Source="View/Styles/CustomWindow.xaml"/>               
+            </ResourceDictionary.MergedDictionaries>           
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
