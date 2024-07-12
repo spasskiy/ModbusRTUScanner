@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Fonts\A25Kamadjaja.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

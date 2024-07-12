@@ -11,25 +11,24 @@ namespace ModbusRTUScanner.ViewModel
 {
     public partial class MainWindowViewModel
     {
-        private readonly MainWindowViewModelFlags _flagsManager;
-        
+        private readonly MainWindowViewModelFlags _flagsManager;        
         private readonly RelayCommand<object> _switchThemeCommand;
         
-        
-        
+
         public MainWindowViewModel()
         {
             //Инициализация свойств
             _flagsManager = new MainWindowViewModelFlags();
-
+            //Привязка обработчиков смены темы оформления
+            new AppThemeManager(_flagsManager);
+            //Создание объекта с настройками порта
+            PortSettings = new SerialPortSettings();
             //Инициализация команд
             _switchThemeCommand = new RelayCommand<object>((_) => FlagsManager.IsNightModeOn = !FlagsManager.IsNightModeOn);
-        }
-
-        
+        }               
 
         public MainWindowViewModelFlags FlagsManager { get => _flagsManager; }
-
         public ICommand SwitchThemeCommand => _switchThemeCommand;
+        public SerialPortSettings PortSettings { get; init; }
     }
 }

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModbusRTUScanner"
         Style="{StaticResource CustomWindowStyle}"
+        DataContext="{DynamicResource MainWindowViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
@@ -22,6 +23,30 @@
                  FontFamily="{StaticResource MetronautsSuperItal}"                   
              />
         <StackPanel Grid.Row="1">
+            <Grid>
+                <GroupBox Header="COM Порт">
+                    <ListBox ItemsSource="{Binding ComPortsList}"
+                        SelectedItem="{Binding SelectedComPort}"
+                        />
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>
+                        <TextBlock Text="Параметры подключения" Style="{StaticResource  HeaderTextBlock}"/>
+                    </GroupBox.Header>
+                    <UniformGrid Rows="5" Columns="2">
+                        <TextBlock Text="Speed: "/>
+                        <TextBlock Text="{Binding PortSettings.BaudRate}" />
+                        <TextBlock Text="DataBits: "/>
+                        <TextBlock Text="{Binding PortSettings.DataBits}" />
+                        <TextBlock Text="Parity: "/>
+                        <TextBlock Text="{Binding PortSettings.Parity}" />
+                        <TextBlock Text="StopBits: "/>
+                        <TextBlock Text="{Binding PortSettings.StopBits}" />
+                        <TextBlock Text="Address: "/>
+                        <TextBlock Text="{Binding Address}" />
+                    </UniformGrid>
+                </GroupBox>
+            </Grid>
             <Button Style="{StaticResource NightButtonStyle}"  
                     Width="101"
                     Command="{Binding SwitchThemeCommand}"

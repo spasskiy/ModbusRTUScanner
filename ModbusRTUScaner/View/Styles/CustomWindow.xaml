@@ -27,13 +27,13 @@
         <Grid Style="{StaticResource GridNoneStyle}">
             <Grid.Resources>
                 <Viewbox x:Key="MaximizedCop" Visibility="Collapsed" Width="12" Height="12">
-                    <Path Stroke="#000000" StrokeThickness="1"
+                    <Path Stroke="{DynamicResource TextBrush}" StrokeThickness="1"
       Data="M8.77778 8.77778H11V1H3.22222V3.22222M8.77778 8.77778V3.22222H3.22222M8.77778 8.77778V11H1V3.22222H3.22222"></Path>
                 </Viewbox>
             </Grid.Resources>
-            <Border x:Name="Normal" BorderBrush="#000000"  BorderThickness="1" Width="11" Height="11"></Border>
+            <Border x:Name="Normal" BorderBrush="{DynamicResource TextBrush}"  BorderThickness="1" Width="11" Height="11"></Border>
             <Viewbox x:Name="Maximized" Visibility="Collapsed" Width="12" Height="12">
-                <Path Stroke="#000000" StrokeThickness="1"
+                <Path Stroke="{DynamicResource TextBrush}" StrokeThickness="1"
                   Data="M8.77778 8.77778H11V1H3.22222V3.22222M8.77778 8.77778V3.22222H3.22222M8.77778 8.77778V11H1V3.22222H3.22222"></Path>
             </Viewbox>
         </Grid>
@@ -48,7 +48,7 @@
     <!--Контент для кнопки свернуть окно-->
     <DataTemplate x:Key="ContentBtnMinimize">
         <Viewbox Width="12" Height="2">
-            <Path Stroke="Black" StrokeThickness="0.8"  StrokeEndLineCap="Round" StrokeStartLineCap="Round">
+            <Path Stroke="{DynamicResource TextBrush}" StrokeThickness="0.8"  StrokeEndLineCap="Round" StrokeStartLineCap="Round">
                 <Path.Data>M11 1L1 0.999935</Path.Data>
             </Path>
         </Viewbox>
@@ -62,9 +62,9 @@
                     <Border x:Name="root" Background="{DynamicResource MainBackgroundBrush}">
                         <Viewbox Width="14" Height="12">
                             <Grid Style="{StaticResource GridNoneStyle}">
-                                <Path x:Name="s1" Stroke="Black" StrokeThickness="0.8" StrokeStartLineCap="Round"  StrokeEndLineCap="Round" 
+                                <Path x:Name="s1" Stroke="{DynamicResource TextBrush}" StrokeThickness="0.8" StrokeStartLineCap="Round"  StrokeEndLineCap="Round" 
                                       Data="M1.3999 1.60447L10.3999 10.1951"></Path>
-                                <Path x:Name="s2" Stroke="Black" StrokeThickness="0.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" 
+                                <Path x:Name="s2" Stroke="{DynamicResource TextBrush}" StrokeThickness="0.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" 
                                       Data="M10.2003 1.40485L1.60034 10.3955" Cursor=""></Path>
                             </Grid>
                         </Viewbox>

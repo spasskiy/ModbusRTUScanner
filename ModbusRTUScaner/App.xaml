@@ -2,9 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ModbusRTUScanner"
+             xmlns:vm="clr-namespace:ModbusRTUScanner.ViewModel"
              StartupUri="View\MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <vm:MainWindowViewModel x:Key="MainWindowViewModel"/>
             <FontFamily x:Key="FlightCorps3DItalic">pack://application:,,,/Resources/Fonts/flightcorps3dital.ttf#Flight Corps 3D Italic</FontFamily>
             <FontFamily x:Key="MetronautsSuperItal">pack://application:,,,/Resources/Fonts/metronautssuperital.otf#Metronauts Super</FontFamily>
             <FontFamily x:Key="Jeremiah">pack://application:,,,/Resources/Fonts/JРІrРІmiah.ttf#Jeremiah</FontFamily>
@@ -15,6 +17,6 @@
                 <ResourceDictionary Source="View/Styles/MainDictionary.xaml"/>
                 <ResourceDictionary Source="View/Styles/CustomWindow.xaml"/>               
             </ResourceDictionary.MergedDictionaries>           
-        </ResourceDictionary>
+        </ResourceDictionary>        
     </Application.Resources>
 </Application>

@@ -19,8 +19,15 @@ namespace ModbusRTUScanner.ViewModel
         public bool IsNightModeOn
         {
             get => _isNightModeOn;
-            set => SetOptions(nameof(IsNightModeOn), ref  _isNightModeOn, value);
+            set
+            {
+                SetOptions(nameof(IsNightModeOn), ref _isNightModeOn, value);
+                ThemeChanged?.Invoke(this, EventArgs.Empty);
+            }
+
         }
+
+        public event EventHandler? ThemeChanged;
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler? PropertyChanged;

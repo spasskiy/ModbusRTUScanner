@@ -56,6 +56,8 @@
     <Style x:Key="HeaderTextBlock" TargetType="TextBlock" >
         <Setter Property="Background"
              Value="{DynamicResource MainBackgroundBrush}"/>
+        <Setter Property="Foreground"
+            Value="{DynamicResource TextBrush}"/>
         <Setter Property="Padding"
              Value="5 1"/>
         <Setter Property="FontWeight"
