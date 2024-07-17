@@ -6,7 +6,7 @@
     <SolidColorBrush x:Key="ForegroundBrush" Color="Gold"/>
     <SolidColorBrush x:Key="MainBackgroundBrush" Color="#333333"/>
     <SolidColorBrush x:Key="TextBrush" Color="White"/>
-    <SolidColorBrush x:Key="InputTextBackgroundBrush" Color="Green"/>
+    <SolidColorBrush x:Key="InputTextBackgroundBrush" Color="DarkGray"/>
     <SolidColorBrush x:Key="InactiveButton" Color="Blue"/>
     <SolidColorBrush x:Key="InactiveText" Color="Orange"/>
     <SolidColorBrush x:Key="ButtonUderMouse" Color="#666666"/>

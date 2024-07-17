@@ -10,7 +10,7 @@ namespace ModbusRTUScanner.Model
 {
     public class SerialPortSettings
     {
-        public string PortName { get; set; }
+        public string? PortName { get; set; }
         public int BaudRate { get; set; }
         public int DataBits { get; set; }
         public StopBits StopBits { get; set; }
@@ -29,20 +29,23 @@ namespace ModbusRTUScanner.Model
             ReadTimeout = 1000;
         }
 
-        public SerialPortSettings(SerialPort serialPort)
+        public SerialPortSettings(SerialPort? serialPort)
         {
             LoadSettingsFromSerialPort(serialPort);
         }
 
-        public void LoadSettingsFromSerialPort(SerialPort serialPort)
+        public void LoadSettingsFromSerialPort(SerialPort? serialPort)
         {
-            PortName = serialPort.PortName;
-            BaudRate = serialPort.BaudRate;
-            DataBits = serialPort.DataBits;
-            StopBits = serialPort.StopBits;
-            Parity = serialPort.Parity;
-            WriteTimeout = serialPort.WriteTimeout;
-            ReadTimeout = serialPort.ReadTimeout;
+            if(serialPort is not null)
+            {
+                PortName = serialPort.PortName;
+                BaudRate = serialPort.BaudRate;
+                DataBits = serialPort.DataBits;
+                StopBits = serialPort.StopBits;
+                Parity = serialPort.Parity;
+                WriteTimeout = serialPort.WriteTimeout;
+                ReadTimeout = serialPort.ReadTimeout;
+            }
         }
     }
 }

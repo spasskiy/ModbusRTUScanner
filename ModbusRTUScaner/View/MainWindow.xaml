@@ -17,36 +17,49 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="MODBUS RTU SCANNER"
+                   Style="{DynamicResource TextBlockBase}" 
                  HorizontalAlignment="Left" 
                  Margin="10 -35 0 0"
                  FontSize="30"                    
                  FontFamily="{StaticResource MetronautsSuperItal}"                   
              />
         <StackPanel Grid.Row="1">
-            <Grid>
-                <GroupBox Header="COM Порт">
-                    <ListBox ItemsSource="{Binding ComPortsList}"
-                        SelectedItem="{Binding SelectedComPort}"
-                        />
-                </GroupBox>
-                <GroupBox>
-                    <GroupBox.Header>
-                        <TextBlock Text="Параметры подключения" Style="{StaticResource  HeaderTextBlock}"/>
-                    </GroupBox.Header>
-                    <UniformGrid Rows="5" Columns="2">
-                        <TextBlock Text="Speed: "/>
-                        <TextBlock Text="{Binding PortSettings.BaudRate}" />
-                        <TextBlock Text="DataBits: "/>
-                        <TextBlock Text="{Binding PortSettings.DataBits}" />
-                        <TextBlock Text="Parity: "/>
-                        <TextBlock Text="{Binding PortSettings.Parity}" />
-                        <TextBlock Text="StopBits: "/>
-                        <TextBlock Text="{Binding PortSettings.StopBits}" />
-                        <TextBlock Text="Address: "/>
-                        <TextBlock Text="{Binding Address}" />
+            <GroupBox >
+                <GroupBox.Header>
+                    <TextBlock Text="COM Порт" Style="{StaticResource  HeaderTextBlock}"/>
+                </GroupBox.Header>
+                <ComboBox ItemsSource="{Binding ViewManager.Ports}"
+                        DisplayMemberPath="PortName"
+                        SelectedItem="{Binding ViewManager.SelectedPort}"                        
+                        >
+                </ComboBox>
+            </GroupBox>
+            <GroupBox Width="250" Height="260" Padding="5 10 5 0">
+                <GroupBox.Header>
+                    <TextBlock Text="Параметры подключения" Style="{StaticResource  HeaderTextBlock}"/>
+                </GroupBox.Header>
+                <StackPanel>
+                    <UniformGrid Rows="6" Columns="2">
+                        <TextBlock Style="{DynamicResource TextBlockBase}" Text="Speed: "/>
+                        <TextBox Text="{Binding ViewManager.PortSettings.BaudRate}" />
+                        <TextBlock Style="{DynamicResource TextBlockBase}" Text="DataBits: "/>
+                        <TextBox  Text="{Binding ViewManager.PortSettings.DataBits}" />
+                        <TextBlock Style="{DynamicResource TextBlockBase}" Text="Parity: "/>
+                        <TextBox  Text="{Binding ViewManager.PortSettings.Parity}" />
+                        <TextBlock Style="{DynamicResource TextBlockBase}" Text="StopBits: "/>
+                        <TextBox  Text="{Binding ViewManager.PortSettings.StopBits}" />
                     </UniformGrid>
-                </GroupBox>
-            </Grid>
+                    <Expander Header="Таймауты :" Margin="0 -30 0 0">
+                        <UniformGrid Rows="2" Columns="2">
+                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="WriteTimeout: "/>
+                            <TextBox  Text="{Binding ViewManager.PortSettings.WriteTimeout}" />
+                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="ReadTimeout: "/>
+                            <TextBox  Text="{Binding ViewManager.PortSettings.ReadTimeout}" />
+                        </UniformGrid>
+                    </Expander>
+                </StackPanel>                
+            </GroupBox>
+
             <Button Style="{StaticResource NightButtonStyle}"  
                     Width="101"
                     Command="{Binding SwitchThemeCommand}"
@@ -56,17 +69,17 @@
                         <Image.Style>
                             <Style TargetType="Image">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding FlagsManager.IsNightModeOn}" Value="True">
+                                    <DataTrigger Binding="{Binding ViewManager.FlagsManager.IsNightModeOn}" Value="True">
                                         <Setter Property="Source" Value="/Resources/Images/Night.png"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding FlagsManager.IsNightModeOn}" Value="False">
+                                    <DataTrigger Binding="{Binding ViewManager.FlagsManager.IsNightModeOn}" Value="False">
                                         <Setter Property="Source" Value="/Resources/Images/Day.png"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Image.Style>
                     </Image>
-                </Button.Content>               
+                </Button.Content>
             </Button>
         </StackPanel>
     </Grid>

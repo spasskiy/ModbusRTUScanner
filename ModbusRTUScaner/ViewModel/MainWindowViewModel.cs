@@ -10,25 +10,23 @@ using System.Windows.Input;
 namespace ModbusRTUScanner.ViewModel
 {
     public partial class MainWindowViewModel
-    {
-        private readonly MainWindowViewModelFlags _flagsManager;        
+    {        
         private readonly RelayCommand<object> _switchThemeCommand;
-        
+        public ViewModelManager ViewManager {get; init;}
 
         public MainWindowViewModel()
         {
             //Инициализация свойств
-            _flagsManager = new MainWindowViewModelFlags();
-            //Привязка обработчиков смены темы оформления
-            new AppThemeManager(_flagsManager);
-            //Создание объекта с настройками порта
-            PortSettings = new SerialPortSettings();
+            ViewManager = new ViewModelManagerBuilder().Build();
+
             //Инициализация команд
-            _switchThemeCommand = new RelayCommand<object>((_) => FlagsManager.IsNightModeOn = !FlagsManager.IsNightModeOn);
+            _switchThemeCommand = new RelayCommand<object>((_) => ViewManager.FlagsManager.IsNightModeOn = !ViewManager.FlagsManager.IsNightModeOn);
+
+            
         }               
 
-        public MainWindowViewModelFlags FlagsManager { get => _flagsManager; }
+
         public ICommand SwitchThemeCommand => _switchThemeCommand;
-        public SerialPortSettings PortSettings { get; init; }
+
     }
 }

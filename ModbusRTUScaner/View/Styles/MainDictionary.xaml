@@ -6,6 +6,8 @@
              Value="Center"/>
         <Setter Property="Margin"
              Value="2"/>
+        <Setter Property="Foreground"
+                Value="Black"/>
     </Style>
 
     <Style TargetType="Grid">
@@ -39,7 +41,7 @@
              Value="2"/>
     </Style>
 
-    <Style TargetType="TextBlock">
+    <Style x:Key="TextBlockBase" TargetType="TextBlock">
         <Setter Property="Foreground"
              Value="{DynamicResource TextBrush}"/>
         <Setter Property="VerticalAlignment"
@@ -129,7 +131,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <Style TargetType="Button" x:Key="SupWindowButton" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
         <Setter Property="Margin"
@@ -226,7 +228,7 @@
         <Setter Property="Background" Value="{DynamicResource MainBackgroundBrush}"/>
     </Style>
 
-    <Style  TargetType="MenuItem">        
+    <Style  TargetType="MenuItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
@@ -250,7 +252,7 @@
                 <Setter Property="TextBlock.Foreground" Value="Red"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="False">
-                <Setter Property="Background" Value="{DynamicResource MainBackgroundBrush}"/>                
+                <Setter Property="Background" Value="{DynamicResource MainBackgroundBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -258,5 +260,72 @@
     <Style x:Key="MenuSeparatorStyle" TargetType="Separator">
         <Setter Property="Background" Value="{DynamicResource TextBrush}"/>
     </Style>
-    
+
+    <Style TargetType="ComboBoxItem">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Padding" Value="5" />
+    </Style>
+
+    <Style TargetType="Expander">
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource MainBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Top"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Expander">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="True">
+                        <DockPanel>
+                            <ToggleButton x:Name="HeaderSite"
+                                      Content="{TemplateBinding Header}"
+                                      FontWeight="Bold"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                      DockPanel.Dock="Top"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Center"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Center"
+                                      Padding="5">                              
+                            </ToggleButton>
+                            <ContentPresenter x:Name="ExpandSite"
+                                          Visibility="Collapsed"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="ExpandSite" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ToggleButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid Background="{DynamicResource BackgroundBrush}" Height="28">
+                        
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
 </ResourceDictionary>
