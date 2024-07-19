@@ -26,6 +26,15 @@ namespace ModbusRTUScanner.ViewModel
             }
 
         }
+        private bool _isScanRun;
+        /// <summary>
+        /// Флаг запуска сканирования
+        /// </summary>
+        public bool IsScanRun
+        {
+            get => _isScanRun;
+            set => SetOptions(nameof(IsScanRun), ref _isScanRun, value);
+        }
 
         public event EventHandler? ThemeChanged;
 

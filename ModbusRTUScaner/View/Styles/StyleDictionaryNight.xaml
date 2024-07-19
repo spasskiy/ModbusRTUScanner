@@ -3,14 +3,15 @@
                     >
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="Black"/>
-    <SolidColorBrush x:Key="ForegroundBrush" Color="Gold"/>
+    <SolidColorBrush x:Key="ForegroundBrush" Color="White"/>
     <SolidColorBrush x:Key="MainBackgroundBrush" Color="#333333"/>
     <SolidColorBrush x:Key="TextBrush" Color="White"/>
     <SolidColorBrush x:Key="InputTextBackgroundBrush" Color="DarkGray"/>
     <SolidColorBrush x:Key="InactiveButton" Color="Blue"/>
     <SolidColorBrush x:Key="InactiveText" Color="Orange"/>
     <SolidColorBrush x:Key="ButtonUderMouse" Color="#666666"/>
-    <SolidColorBrush x:Key="TextButtonUderMouse" Color="Red"/>
+    <SolidColorBrush x:Key="TextButtonUderMouse" Color="Black"/>
+    <SolidColorBrush x:Key="ButtonBrush" Color="Black"/>
 
     <!-- Фон строк регистров -->
     <SolidColorBrush x:Key="InputRegisterBackground" Color="#440000"/>

@@ -11,6 +11,7 @@
     <SolidColorBrush x:Key="InactiveText" Color="LightGray"/>
     <SolidColorBrush x:Key="ButtonUderMouse" Color="LightBlue"/>
     <SolidColorBrush x:Key="TextButtonUderMouse" Color="DarkBlue"/>
+    <SolidColorBrush x:Key="ButtonBrush" Color="#7B7BD3"/>
 
 
 

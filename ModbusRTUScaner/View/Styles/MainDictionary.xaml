@@ -85,7 +85,7 @@
     </Style>
 
     <Style TargetType="Button">
-        <Setter Property="Margin" Value="1 0 1 1"/>
+        <Setter Property="Margin" Value="5 1 5 1"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="MinHeight" Value="25"/>
         <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
@@ -96,6 +96,7 @@
                         <TextBlock x:Name="textBlock" Foreground="{DynamicResource ForegroundBrush}"
                             Text="{TemplateBinding Content}"                               
                             HorizontalAlignment="Center"
+                                   FontSize="20"
                             VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -199,6 +200,8 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="Margin" Value="15 5"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"/>
     </Style>
 
@@ -318,8 +321,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid Background="{DynamicResource BackgroundBrush}" Height="28">
-                        
+                    <Grid Height="28">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Background" Value="{DynamicResource ButtonBrush}" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource ButtonUderMouse}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                 </ControlTemplate>
@@ -327,5 +339,77 @@
         </Setter>
     </Style>
 
+    <Style TargetType="ProgressBar" x:Key="MainProgressBarStyle">
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Height" Value="25"/>
+    </Style>
+
+    <Style x:Key="GroupBoxBaseStyle" TargetType="GroupBox">
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Style="{StaticResource HeaderTextBlock}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FancyCheckBox" TargetType="CheckBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid>
+                        <Border 
+                        Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="2" 
+                        CornerRadius="4" 
+                        Padding="5">
+                            <Grid x:Name="CheckMark" Visibility="Collapsed">
+                                <Path Data="M 0 0 L 1 1 L 1 0 Z" 
+                                  Fill="White" 
+                                  Stroke="Transparent" 
+                                  StrokeThickness="2" 
+                                  HorizontalAlignment="Right" 
+                                  VerticalAlignment="Center" 
+                                  RenderTransformOrigin="0.5,0.5">
+                                    <Path.RenderTransform>
+                                        <RotateTransform Angle="45" />
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Grid>
+                        </Border>
+                        <ContentPresenter 
+                        x:Name="contentPresenter"                             
+                        ContentSource="Content" 
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Center" 
+                        Margin="15,0,5,0" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            <Setter Property="Background" Value="LightGreen" />
+                            <Setter Property="BorderBrush" Value="Green" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightGray" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="Gray" />
+                            <Setter Property="Background" Value="LightGray" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="#FFDDDDDD" />
+        <Setter Property="BorderBrush" Value="#FF999999" />
+        <Setter Property="Foreground" Value="Red" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Margin" Value="1" />
+    </Style>
 
 </ResourceDictionary>

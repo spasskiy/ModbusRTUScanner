@@ -4,12 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModbusRTUScanner"
+        xmlns:converters="clr-namespace:ModbusRTUScanner.Model.Converters"
         Style="{StaticResource CustomWindowStyle}"
         DataContext="{DynamicResource MainWindowViewModel}"
         mc:Ignorable="d"
+        MinWidth="1050"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
-
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:BooleanToVisibilityReverseConverter x:Key="BooleanToVisibilityReverseConverter"/>
     </Window.Resources>
     <Grid Grid.Row="1">
         <Grid.RowDefinitions>
@@ -23,64 +26,145 @@
                  FontSize="30"                    
                  FontFamily="{StaticResource MetronautsSuperItal}"                   
              />
-        <StackPanel Grid.Row="1">
-            <GroupBox >
-                <GroupBox.Header>
-                    <TextBlock Text="COM Порт" Style="{StaticResource  HeaderTextBlock}"/>
-                </GroupBox.Header>
-                <ComboBox ItemsSource="{Binding ViewManager.Ports}"
-                        DisplayMemberPath="PortName"
-                        SelectedItem="{Binding ViewManager.SelectedPort}"                        
-                        >
-                </ComboBox>
-            </GroupBox>
-            <GroupBox Width="250" Height="260" Padding="5 10 5 0">
-                <GroupBox.Header>
-                    <TextBlock Text="Параметры подключения" Style="{StaticResource  HeaderTextBlock}"/>
-                </GroupBox.Header>
-                <StackPanel>
-                    <UniformGrid Rows="6" Columns="2">
-                        <TextBlock Style="{DynamicResource TextBlockBase}" Text="Speed: "/>
-                        <TextBox Text="{Binding ViewManager.PortSettings.BaudRate}" />
-                        <TextBlock Style="{DynamicResource TextBlockBase}" Text="DataBits: "/>
-                        <TextBox  Text="{Binding ViewManager.PortSettings.DataBits}" />
-                        <TextBlock Style="{DynamicResource TextBlockBase}" Text="Parity: "/>
-                        <TextBox  Text="{Binding ViewManager.PortSettings.Parity}" />
-                        <TextBlock Style="{DynamicResource TextBlockBase}" Text="StopBits: "/>
-                        <TextBox  Text="{Binding ViewManager.PortSettings.StopBits}" />
-                    </UniformGrid>
-                    <Expander Header="Таймауты :" Margin="0 -30 0 0">
-                        <UniformGrid Rows="2" Columns="2">
-                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="WriteTimeout: "/>
-                            <TextBox  Text="{Binding ViewManager.PortSettings.WriteTimeout}" />
-                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="ReadTimeout: "/>
-                            <TextBox  Text="{Binding ViewManager.PortSettings.ReadTimeout}" />
-                        </UniformGrid>
-                    </Expander>
-                </StackPanel>                
-            </GroupBox>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <Button Style="{StaticResource NightButtonStyle}"  
-                    Width="101"
-                    Command="{Binding SwitchThemeCommand}"
-                    BorderThickness="0">
-                <Button.Content>
-                    <Image>
-                        <Image.Style>
-                            <Style TargetType="Image">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ViewManager.FlagsManager.IsNightModeOn}" Value="True">
-                                        <Setter Property="Source" Value="/Resources/Images/Night.png"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding ViewManager.FlagsManager.IsNightModeOn}" Value="False">
-                                        <Setter Property="Source" Value="/Resources/Images/Day.png"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
-                </Button.Content>
-            </Button>
-        </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="0">
+                <GroupBox Margin="6 0 7 0" Style="{StaticResource GroupBoxBaseStyle}" Header="COM Порт">
+                    <ComboBox ItemsSource="{Binding ViewManager.Ports}"
+                 DisplayMemberPath="PortName"
+                 SelectedItem="{Binding ViewManager.SelectedPort}"                        
+                 >
+                    </ComboBox>
+                </GroupBox>
+                <GroupBox Width="250" Height="260" Padding="5 10 5 0" Style="{StaticResource GroupBoxBaseStyle}" Header="Параметры подключения">
+                    <StackPanel>
+                        <UniformGrid Rows="6" Columns="2">
+                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="Speed: "/>
+                            <TextBox Text="{Binding ViewManager.PortSettings.BaudRate}" />
+                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="DataBits: "/>
+                            <TextBox  Text="{Binding ViewManager.PortSettings.DataBits}" />
+                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="Parity: "/>
+                            <TextBox  Text="{Binding ViewManager.PortSettings.Parity}" />
+                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="StopBits: "/>
+                            <TextBox  Text="{Binding ViewManager.PortSettings.StopBits}" />
+                        </UniformGrid>
+                        <Expander Header="Таймауты :" Margin="0 -30 0 0">
+                            <UniformGrid Rows="2" Columns="2">
+                                <TextBlock Style="{DynamicResource TextBlockBase}" Text="WriteTimeout: "/>
+                                <TextBox  Text="{Binding ViewManager.PortSettings.WriteTimeout}" />
+                                <TextBlock Style="{DynamicResource TextBlockBase}" Text="ReadTimeout: "/>
+                                <TextBox  Text="{Binding ViewManager.PortSettings.ReadTimeout}" />
+                            </UniformGrid>
+                        </Expander>
+                    </StackPanel>
+                </GroupBox>
+                <Button Content="ПОИСК" Command="{Binding FindDevicesCommand}" Visibility="{Binding ViewManager.FlagsManager.IsScanRun, Converter={StaticResource BooleanToVisibilityReverseConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Content="ОТМЕНА" Command="{Binding CancelCommand}" Visibility="{Binding ViewManager.FlagsManager.IsScanRun, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <Button Style="{StaticResource NightButtonStyle}"  
+             Width="101"
+             Command="{Binding SwitchThemeCommand}"
+             BorderThickness="0">
+                    <Button.Content>
+                        <Image>
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ViewManager.FlagsManager.IsNightModeOn}" Value="True">
+                                            <Setter Property="Source" Value="/Resources/Images/Night.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ViewManager.FlagsManager.IsNightModeOn}" Value="False">
+                                            <Setter Property="Source" Value="/Resources/Images/Day.png"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+            <GroupBox Grid.Row="0" Grid.Column="1" Style="{StaticResource GroupBoxBaseStyle}" Header="Скорость (бод)" Margin="5 0">
+
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="300"/>
+                    <CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="600"/>
+                    <CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="1200"/>
+                    <CheckBox Grid.Row="3" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="2400"/>
+                    <CheckBox Grid.Row="4" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="4800"/>
+                    <CheckBox Grid.Row="5" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="7200"/>
+                    <CheckBox Grid.Row="6" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="9600"/>
+                    <CheckBox Grid.Row="7" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="14400"/>
+                    <CheckBox Grid.Row="8" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="19200"/>
+                    <CheckBox Grid.Row="9" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="38400"/>
+                    <CheckBox Grid.Row="10" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="56000"/>
+                    <CheckBox Grid.Row="11" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="57600"/>
+                    <CheckBox Grid.Row="12" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="115200"/>
+                    <CheckBox Grid.Row="13" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="128000"/>
+                    <CheckBox Grid.Row="14" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="144000"/>
+                    <CheckBox Grid.Row="15" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="256000"/>
+                    <CheckBox Grid.Row="16" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="Своя :"/>
+                    <TextBox Grid.Row="16" Grid.Column="1"/>
+                </Grid>
+
+
+
+            </GroupBox>
+            <StackPanel Grid.Row="0" Grid.Column="2" >
+                <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Data bits">
+
+                </GroupBox>
+                <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Parity">
+
+                </GroupBox>
+                <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Stop bits">
+
+                </GroupBox>
+                <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Диапазон адресов">
+
+                </GroupBox>
+            </StackPanel>
+            <GroupBox Grid.Row="0" Grid.Column="3" Style="{StaticResource GroupBoxBaseStyle}" Header="Результаты сканирования">
+
+
+
+            </GroupBox>
+            <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
+                <ProgressBar Style="{StaticResource MainProgressBarStyle}"></ProgressBar>
+            </StackPanel>
+            <Button Grid.Column="3" Grid.Row="1" Content="ВЫХОД"/>
+        </Grid>
     </Grid>
 </Window>
