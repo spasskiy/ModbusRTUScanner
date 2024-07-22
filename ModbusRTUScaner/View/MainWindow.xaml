@@ -98,9 +98,9 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -136,7 +136,7 @@
                     <CheckBox Grid.Row="14" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="144000"/>
                     <CheckBox Grid.Row="15" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="256000"/>
                     <CheckBox Grid.Row="16" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="Своя :"/>
-                    <TextBox Grid.Row="16" Grid.Column="1"/>
+                    <TextBox Grid.Row="17" Grid.Column="0"/>
                 </Grid>
 
 

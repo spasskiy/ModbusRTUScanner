@@ -7,11 +7,21 @@
     <SolidColorBrush x:Key="MainBackgroundBrush" Color="#333333"/>
     <SolidColorBrush x:Key="TextBrush" Color="White"/>
     <SolidColorBrush x:Key="InputTextBackgroundBrush" Color="DarkGray"/>
-    <SolidColorBrush x:Key="InactiveButton" Color="Blue"/>
-    <SolidColorBrush x:Key="InactiveText" Color="Orange"/>
+    <SolidColorBrush x:Key="InactiveButton" Color="White"/>
+    <SolidColorBrush x:Key="InactiveText" Color="DarkGray"/>
     <SolidColorBrush x:Key="ButtonUderMouse" Color="#666666"/>
-    <SolidColorBrush x:Key="TextButtonUderMouse" Color="Black"/>
+    <SolidColorBrush x:Key="TextButtonUderMouse" Color="White"/>
     <SolidColorBrush x:Key="ButtonBrush" Color="Black"/>
+
+    <SolidColorBrush x:Key="CheckBoxIsCheckedBackground" Color="Black" />
+    <SolidColorBrush x:Key="CheckBoxIsCheckedBorderBrush" Color="White" />
+    <SolidColorBrush x:Key="CheckBoxIsCheckedForeground" Color="White" />
+    <SolidColorBrush x:Key="CheckboxIsMouseOverBackground" Color="White" />
+    <SolidColorBrush x:Key="CheckboxIsMouseOverBorderBrush" Color="#FF5A5A5A" />
+    <SolidColorBrush x:Key="CheckboxIsMouseOverForeground" Color="#FF000000" />
+    <SolidColorBrush x:Key="CheckboxBackground" Color="#FFF0F0F0" />
+    <SolidColorBrush x:Key="CheckboxBorderBrush" Color="#FFD3D3D3" />
+    <SolidColorBrush x:Key="CheckboxForeground" Color="Gray" />
 
     <!-- Фон строк регистров -->
     <SolidColorBrush x:Key="InputRegisterBackground" Color="#440000"/>

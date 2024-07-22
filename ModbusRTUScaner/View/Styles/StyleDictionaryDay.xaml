@@ -13,6 +13,15 @@
     <SolidColorBrush x:Key="TextButtonUderMouse" Color="DarkBlue"/>
     <SolidColorBrush x:Key="ButtonBrush" Color="#7B7BD3"/>
 
+    <SolidColorBrush x:Key="CheckBoxIsCheckedBackground" Color="#7B7BD3" />
+    <SolidColorBrush x:Key="CheckBoxIsCheckedBorderBrush" Color="DarkBlue" />
+    <SolidColorBrush x:Key="CheckBoxIsCheckedForeground" Color="#F1F1FD" />
+    <SolidColorBrush x:Key="CheckboxIsMouseOverBackground" Color="White" />
+    <SolidColorBrush x:Key="CheckboxIsMouseOverBorderBrush" Color="#6B6BC3" />
+    <SolidColorBrush x:Key="CheckboxIsMouseOverForeground" Color="#6B6BC3" />
+    <SolidColorBrush x:Key="CheckboxBackground" Color="Lavender" />
+    <SolidColorBrush x:Key="CheckboxBorderBrush" Color="#7B7BD3" />
+    <SolidColorBrush x:Key="CheckboxForeground" Color="Gray" />
 
 
     <!-- Фон строк регистров -->
