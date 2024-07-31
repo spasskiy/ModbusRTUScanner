@@ -8,7 +8,7 @@
     <SolidColorBrush x:Key="TextBrush" Color="Black"/>
     <SolidColorBrush x:Key="InputTextBackgroundBrush" Color="White"/>
     <SolidColorBrush x:Key="InactiveButton" Color="Gray"/>
-    <SolidColorBrush x:Key="InactiveText" Color="LightGray"/>
+    <SolidColorBrush x:Key="InactiveText" Color="Gray"/>
     <SolidColorBrush x:Key="ButtonUderMouse" Color="LightBlue"/>
     <SolidColorBrush x:Key="TextButtonUderMouse" Color="DarkBlue"/>
     <SolidColorBrush x:Key="ButtonBrush" Color="#7B7BD3"/>
@@ -23,6 +23,8 @@
     <SolidColorBrush x:Key="CheckboxBorderBrush" Color="#7B7BD3" />
     <SolidColorBrush x:Key="CheckboxForeground" Color="Gray" />
 
+    <SolidColorBrush x:Key="RadioButtonBackground" Color="Lavender" />
+    <SolidColorBrush x:Key="RadioButtonBorderBrush" Color="#6B6BC3" />
 
     <!-- Фон строк регистров -->
     <SolidColorBrush x:Key="InputRegisterBackground" Color="#DDFFFF"/>

@@ -1,0 +1,128 @@
+@startuml
+class MainWindow{
+
+}
+
+namespace View{
+    namespace Controls{
+        namespace Utility{
+            class VisualTreeFinder{
+
+            }
+            VisualTreeFinder <-- View.Controls.ConsoleTextBox
+        }
+
+        class ConsoleTextBox{
+
+        }
+        ConsoleTextBox <-- MainWindow
+        class TextBoxPlaceholderControl{
+
+        }
+        TextBoxPlaceholderControl <-- MainWindow
+    }
+    namespace Converters{
+        class BooleanToVisibilityConverter{
+
+        }
+        class BooleanToVisibilityReverseConverter{
+
+        }
+        class StringToVisibilityConverter{
+
+        }
+        BooleanToVisibilityConverter <-- MainWindow
+        BooleanToVisibilityReverseConverter <-- MainWindow
+        StringToVisibilityConverter <-- TextBoxPlaceholderControl
+    }
+    namespace Style{
+        class CustomWindow << (S,lavender) >>{
+
+        }
+        class MainDictionary << (S,lavender) >>{
+
+        }
+        class StyleDictionaryDay << (S,lavender) >>{
+
+        }
+        class StyleDictionaryNight << (S,lavender) >>{
+
+        }
+        CustomWindow <---- MainWindow
+        MainDictionary <---- MainWindow
+        StyleDictionaryDay <---- MainWindow
+        StyleDictionaryNight <---- MainWindow
+    }
+
+    
+}
+
+namespace ViewModel{
+    class MainWindowViewModel{
+
+    }
+}
+
+namespace Model{
+
+    class AppThemeManager{
+
+    }
+
+    class DeviceConnectionSettings{
+
+    }
+
+    class MainWindowViewModelFlags{
+
+    }
+
+    class RelayCommand{
+
+    }
+
+    class ScannerModel{
+
+    }
+
+    class ScannerSettings{
+
+    }
+
+    class SerialPortGetter{
+
+    }
+
+    class SerialPortManager{
+
+    }
+
+    class SerialPortSettings{
+
+    }
+
+    class SerialPortUtils{
+
+    }
+
+    class ViewModelManager{
+
+    }
+
+    class ViewModelManagerBuilder{
+
+    }
+
+
+
+
+}
+
+MainWindow o-- MainWindowViewModel
+MainWindowViewModel o-- RelayCommand
+MainWindowViewModel o-- ViewModelManager
+MainWindowViewModel <-- ViewModelManagerBuilder
+ViewModelManagerBuilder o- ViewModelManager
+ViewModelManagerBuilder <-- AppThemeManager
+ViewModelManager o-- AppThemeManager
+@enduml

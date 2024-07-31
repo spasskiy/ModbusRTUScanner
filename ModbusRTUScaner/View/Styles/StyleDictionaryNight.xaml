@@ -23,6 +23,9 @@
     <SolidColorBrush x:Key="CheckboxBorderBrush" Color="#FFD3D3D3" />
     <SolidColorBrush x:Key="CheckboxForeground" Color="Gray" />
 
+    <SolidColorBrush x:Key="RadioButtonBackground" Color="Black" />
+    <SolidColorBrush x:Key="RadioButtonBorderBrush" Color="White" />
+
     <!-- Фон строк регистров -->
     <SolidColorBrush x:Key="InputRegisterBackground" Color="#440000"/>
     <SolidColorBrush x:Key="HoldingRegisterBackground" Color="#004444"/>

@@ -398,4 +398,49 @@
         <Setter Property="Margin" Value="1" />
     </Style>
 
+    <Style TargetType="RadioButton">
+        <Setter Property="Foreground" Value="{DynamicResource InactiveText}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Margin" Value="3"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <DockPanel LastChildFill="True">
+                        <Border x:Name="Border" 
+                            Width="20" 
+                            Height="20" 
+                            CornerRadius="10" 
+                            BorderBrush="{DynamicResource InactiveText}" 
+                            BorderThickness="2" 
+                            Background="{DynamicResource RadioButtonBackground}"
+                            DockPanel.Dock="Left">
+                            <Ellipse x:Name="CheckMark" 
+                                 Width="12" 
+                                 Height="12" 
+                                 Fill="{DynamicResource RadioButtonBorderBrush}" 
+                                 Visibility="Collapsed"/>
+                        </Border>
+                        <ContentPresenter HorizontalAlignment="Left" 
+                                      VerticalAlignment="Center" 
+                                      Margin="8, -2, 0, 0"/>
+                    </DockPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource RadioButtonBorderBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource TextButtonUderMouse}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
 </ResourceDictionary>

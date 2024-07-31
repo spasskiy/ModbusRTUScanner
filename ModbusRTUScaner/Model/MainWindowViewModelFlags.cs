@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModbusRTUScanner.ViewModel
+namespace ModbusRTUScanner.Model
 {
     /// <summary>
     /// Класс с флагами состояния приложения
