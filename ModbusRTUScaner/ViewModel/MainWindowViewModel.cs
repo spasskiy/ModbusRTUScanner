@@ -30,6 +30,11 @@ namespace ModbusRTUScanner.ViewModel
         private readonly RelayCommand<object> _cancelCommand;
 
         /// <summary>
+        /// Команда уста
+        /// </summary>
+        private readonly RelayCommand<object> _setDataBitsCommand;
+
+        /// <summary>
         /// Менеджер ViewModel.
         /// </summary>
         public ViewModelManager ViewManager { get; init; }
@@ -46,6 +51,7 @@ namespace ModbusRTUScanner.ViewModel
             _switchThemeCommand = new RelayCommand<object>((_) => ViewManager.FlagsManager.IsNightModeOn = !ViewManager.FlagsManager.IsNightModeOn);
             _findDevicesCommand = new RelayCommand<object>(FindDevices);
             _cancelCommand = new RelayCommand<object>((_) => MessageBox.Show("CancelCommand"));
+            _setDataBitsCommand = new RelayCommand<object>(ViewManager.SetDataBits);
         }
 
         /// <summary>
@@ -62,6 +68,14 @@ namespace ModbusRTUScanner.ViewModel
         /// Команда для отмены операции.
         /// </summary>
         public ICommand CancelCommand => _cancelCommand;
+
+        /// <summary>
+        /// Команда установки DataBits
+        /// </summary>
+        public ICommand SetDataBitsCommand => _setDataBitsCommand;
+
+
+
 
         /// <summary>
         /// Метод для поиска устройств.

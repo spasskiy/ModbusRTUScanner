@@ -8,11 +8,12 @@
         xmlns:controls="clr-namespace:ModbusRTUScanner.View.Controls"
         xmlns:MahApps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Style="{StaticResource CustomWindowStyle}"
-        DataContext="{DynamicResource MainWindowViewModel}"
+        DataContext="{DynamicResource MainWindowViewModel}"    
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         MinWidth="1000"
         MinHeight="650"
+        x:Name="ThisWindow"
         Title="MainWindow" Width="1000" Height="650">
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -50,9 +51,9 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <GroupBox Margin="6 0 7 0" Style="{StaticResource GroupBoxBaseStyle}" Header="COM Порт">
-                    <ComboBox ItemsSource="{Binding ViewManager.Ports}"
+                    <ComboBox ItemsSource="{Binding ViewManager.PortManager.Ports}"
                  DisplayMemberPath="PortName"
-                 SelectedItem="{Binding ViewManager.SelectedPort, Mode=TwoWay}"                        
+                 SelectedItem="{Binding ViewManager.PortManager.SelectedPort, Mode=TwoWay}"                        
                  >
                     </ComboBox>
                 </GroupBox>
@@ -60,15 +61,15 @@
                     <StackPanel>
                         <UniformGrid Rows="7" Columns="2">
                             <TextBlock Style="{DynamicResource TextBlockBase}" Text="Порт: "/>
-                            <TextBox Text="{Binding ViewManager.SelectedPort.PortName, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Style="{DynamicResource TextBlockVal}" Text="{Binding ViewManager.PortManager.PortSettings.PortName, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Style="{DynamicResource TextBlockBase}" Text="Скорость: "/>
-                            <TextBox Text="{Binding ViewManager.PortSettings.BaudRate}" />
+                            <TextBlock Style="{DynamicResource TextBlockVal}" Text="{Binding ViewManager.PortManager.PortSettings.BaudRate}" />
                             <TextBlock Style="{DynamicResource TextBlockBase}" Text="DataBits: "/>
-                            <TextBox  Text="{Binding ViewManager.PortSettings.DataBits}" />
+                            <TextBlock Style="{DynamicResource TextBlockVal}"   Text="{Binding ViewManager.PortManager.PortSettings.DataBits}" />
                             <TextBlock Style="{DynamicResource TextBlockBase}" Text="Parity: "/>
-                            <TextBox  Text="{Binding ViewManager.PortSettings.Parity}" />
+                            <TextBlock  Style="{DynamicResource TextBlockVal}" Text="{Binding ViewManager.PortManager.PortSettings.Parity}" />
                             <TextBlock Style="{DynamicResource TextBlockBase}" Text="StopBits: "/>
-                            <TextBox  Text="{Binding ViewManager.PortSettings.StopBits}" />
+                            <TextBlock  Style="{DynamicResource TextBlockVal}" Text="{Binding ViewManager.PortManager.PortSettings.StopBits}" />
                         </UniformGrid>
                         <Expander Header="Таймауты :" Margin="0 -30 0 0">
                             <UniformGrid Rows="2" Columns="2">
@@ -105,8 +106,6 @@
                 </Button>
             </Grid>
             <GroupBox Grid.Row="0" Grid.Column="1" Style="{StaticResource GroupBoxBaseStyle}" Header="Скорость (бод)" Margin="5 0">
-
-
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -131,52 +130,50 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="300"/>
-                    <CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="600"/>
-                    <CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="1200"/>
-                    <CheckBox Grid.Row="3" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="2400"/>
-                    <CheckBox Grid.Row="4" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="4800"/>
-                    <CheckBox Grid.Row="5" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="7200"/>
-                    <CheckBox Grid.Row="6" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="9600"/>
-                    <CheckBox Grid.Row="7" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="14400"/>
-                    <CheckBox Grid.Row="8" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="19200"/>
-                    <CheckBox Grid.Row="9" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="38400"/>
-                    <CheckBox Grid.Row="10" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="56000"/>
-                    <CheckBox Grid.Row="11" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="57600"/>
-                    <CheckBox Grid.Row="12" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="115200"/>
-                    <CheckBox Grid.Row="13" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="128000"/>
-                    <CheckBox Grid.Row="14" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="144000"/>
-                    <CheckBox Grid.Row="15" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="256000"/>
-                    <CheckBox Grid.Row="16" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="Своя :"/>
+                    <CheckBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[0].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[0].IsSelected}"/>
+                    <CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[1].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[1].IsSelected}"/>
+                    <CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[2].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[2].IsSelected}"/>
+                    <CheckBox Grid.Row="3" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[3].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[3].IsSelected}"/>
+                    <CheckBox Grid.Row="4" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[4].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[4].IsSelected}"/>
+                    <CheckBox Grid.Row="5" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[5].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[5].IsSelected}"/>
+                    <CheckBox Grid.Row="6" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[6].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[6].IsSelected}"/>
+                    <CheckBox Grid.Row="7" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[7].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[7].IsSelected}"/>
+                    <CheckBox Grid.Row="8" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[8].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[8].IsSelected}"/>
+                    <CheckBox Grid.Row="9" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[9].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[9].IsSelected}"/>
+                    <CheckBox Grid.Row="10" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[10].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[10].IsSelected}"/>
+                    <CheckBox Grid.Row="11" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[11].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[11].IsSelected}"/>
+                    <CheckBox Grid.Row="12" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[12].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[12].IsSelected}"/>
+                    <CheckBox Grid.Row="13" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[13].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[13].IsSelected}"/>
+                    <CheckBox Grid.Row="14" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[14].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[14].IsSelected}"/>
+                    <CheckBox Grid.Row="15" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[15].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[15].IsSelected}"/>
+                    <CheckBox Grid.Row="16" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="Своя :" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[16].IsSelected}"/>
                     <controls:TextBoxPlaceholderControl 
                         Grid.Row="17" 
-                        Grid.Column="0" 
+                        Grid.Column="0"
+                        Text="{Binding ViewManager.PortManager.SerialPortSpeeds[16].PortSpeed}"
                         x:Name="CustomBaudRateControl"                        
                         PlaceholderText ="Задайте вашу скорость"
                         IsDigitalOnly="True"
-                        />                  
+                        />
                 </Grid>
-
-
-
             </GroupBox>
             <StackPanel Grid.Row="0" Grid.Column="2" >
                 <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Data bits">
                     <StackPanel>
-                        <RadioButton Content="7"/>
-                        <RadioButton  Content="8"/>
+                        <RadioButton Content="7" Command="{Binding SetDataBitsCommand}" CommandParameter="7"/>
+                        <RadioButton  Content="8" Command="{Binding SetDataBitsCommand}" CommandParameter="8" IsChecked="True"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Parity">
                     <StackPanel>
-                        <RadioButton Content="None"/>
-                        <RadioButton Content="Ode"/>
-                        <RadioButton Content="Even"/>
+                        <RadioButton Content="None" Command="{Binding SetParityCommand}" IsChecked="True"/>
+                        <RadioButton Content="Ode" Command="{Binding SetParityCommand}"/>
+                        <RadioButton Content="Even" Command="{Binding SetParityCommand}" />
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Stop bits">
                     <StackPanel>
-                        <RadioButton Content="1"/>
+                        <RadioButton Content="1" IsChecked="True"/>
                         <RadioButton  Content="2"/>
                     </StackPanel>
                 </GroupBox>
@@ -203,8 +200,13 @@
                 <StackPanel MinHeight="200">
                     <TextBox Text="{Binding  ElementName=CustomBaudRateControl, Path=Text, UpdateSourceTrigger=PropertyChanged}"/>
                     <TreeView></TreeView>
-                    <TextBox Text="{Binding ViewManager.Console.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>                
+                    <Border BorderBrush="Red" BorderThickness="2">
+                        <TextBox x:Name="TB1" Text="{Binding ViewManager.PortManager.SerialPortSpeeds[16].PortSpeed}"/>
+                    </Border>
+
+                    <TextBox x:Name="TB2" Text="{Binding ViewManager.PortManager.SerialPortSpeeds[16].PortSpeed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox x:Name="TB3" Text="{Binding ViewManager.PortManager.SerialPortSpeeds[16].PortSpeed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
             </GroupBox>
             <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
                 <Grid.RowDefinitions>
@@ -215,10 +217,9 @@
                 <Border Grid.Row="1" BorderBrush="{DynamicResource BackgroundBrush}" Background="{DynamicResource TextBrush}" 
                        Margin="5 0 5 5" BorderThickness="2">
                     <Grid>
-                        <controls:ConsoleTextBox Text="Binding ViewManager.Console.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            
-                        </controls:ConsoleTextBox>
-
+                        <!---Какие-то заморочки с объектом в привязке-->
+                        <controls:ConsoleTextBox Text="{Binding ViewManager.Console.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <!--<controls:ConsoleTextBox Text="{Binding ElementName=ThisWindow, Path=DataContext.ViewManager.Console.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
                     </Grid>
                 </Border>
             </Grid>

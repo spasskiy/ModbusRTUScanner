@@ -47,7 +47,17 @@
         <Setter Property="VerticalAlignment"
              Value="Center"/>
         <Setter Property="HorizontalAlignment"
-             Value="Center"/>
+             Value="Right"/>
+        <Setter Property="FontSize"
+        Value="16"/>
+    </Style>
+
+    <Style x:Key="TextBlockVal" TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}">
+        <Setter Property="FontWeight"
+            Value="Bold"/>
+
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="5 2 0 2"/>
     </Style>
 
     <Style x:Key="TextBlockRight" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">

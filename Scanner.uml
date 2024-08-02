@@ -112,7 +112,7 @@ namespace Model{
     class SerialPortManager{
 
     }
-    ViewModelManager <-- SerialPortManager
+    ViewModelManager o-- SerialPortManager
     ViewModelManagerBuilder <-- SerialPortManager
 
     class SerialPortSettings{
@@ -133,7 +133,10 @@ namespace Model{
 
     }
 
+    class SerialPortSpeedNode{
 
+    }
+    SerialPortManager o-- SerialPortSpeedNode
 
 
 }

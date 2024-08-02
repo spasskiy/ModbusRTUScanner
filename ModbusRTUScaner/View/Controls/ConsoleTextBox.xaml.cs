@@ -8,7 +8,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace ModbusRTUScanner.View.Controls
 {
-    public partial class ConsoleTextBox : UserControl, INotifyPropertyChanged
+    public partial class ConsoleTextBox : UserControl
     {
         /// <summary>
         /// Скроллбар текстового поля
@@ -16,32 +16,16 @@ namespace ModbusRTUScanner.View.Controls
         private ScrollBar? _scrollBar;
 
         public static readonly DependencyProperty TextProperty;
-        
-        //=DependencyProperty.Register("Text", typeof(string), typeof(ConsoleTextBox), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnTextPropertyChanged, CoerceText));
-
-        private static void OnTextPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            string newPropertyValue = (string)e.NewValue;
-            ConsoleTextBox instance = (ConsoleTextBox)d;
-        }
-
-        private static object CoerceText(DependencyObject d, object baseValue)
-        {
-            return baseValue;
-        }
-
-        private string? _text;
         /// <summary>
         /// Текст в текстовом поле
         /// </summary>
         public string? Text
         {
             get => (string)GetValue(TextProperty);
-            set 
+            set
             {
-                SetValue(TextProperty, value);
-                SetOptions(nameof(Text), ref _text, value);
-            } 
+                SetValue(TextProperty, value);                
+            }
         }
         static ConsoleTextBox()
         {
@@ -51,11 +35,20 @@ namespace ModbusRTUScanner.View.Controls
                                 typeof(ConsoleTextBox),
                                 new FrameworkPropertyMetadata(
                                         string.Empty,
-                                new PropertyChangedCallback(OnTextChanged)));
+                                        FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                                        new PropertyChangedCallback(OnTextChanged)));
         }
         private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            //...............................
+            if(d is ConsoleTextBox control)
+            {
+                control.UpdateText();
+            }
+        }
+
+        private void UpdateText()
+        {
+            textBox.Text = Text;
         }
 
         /// <summary>
@@ -63,7 +56,6 @@ namespace ModbusRTUScanner.View.Controls
         /// </summary>
         public ConsoleTextBox()
         {
-            DataContext = this;
             InitializeComponent();
             Loaded += MainWindow_Loaded;
         }
@@ -109,36 +101,7 @@ namespace ModbusRTUScanner.View.Controls
         /// <param name="e">Аргументы события</param>
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            Text = string.Empty;            
+            Text = string.Empty;
         }
-
-        #region INotifyPropertyChanged
-        /// <summary>
-        /// Событие, возникающее при изменении свойства
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        /// <summary>
-        /// Вызывает событие PropertyChanged
-        /// </summary>
-        /// <param name="e">Аргументы события</param>
-        protected void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// Устанавливает значение свойства и вызывает событие PropertyChanged
-        /// </summary>
-        /// <typeparam name="T">Тип свойства</typeparam>
-        /// <param name="property">Имя свойства</param>
-        /// <param name="variable">Ссылка на переменную свойства</param>
-        /// <param name="value">Новое значение свойства</param>
-        protected void SetOptions<T>(string property, ref T variable, T value)
-        {
-            variable = value;
-            OnPropertyChanged(new PropertyChangedEventArgs(property));
-        }
-        #endregion
     }
 }

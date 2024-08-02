@@ -23,14 +23,33 @@ namespace ModbusRTUScanner.View.Controls
     public partial class TextBoxPlaceholderControl : UserControl, INotifyPropertyChanged
     {
         /// <summary>
+        /// DependencyProperty для Text
+        /// </summary>
+        public static readonly DependencyProperty TextProperty;
+
+        static TextBoxPlaceholderControl()
+        {
+            TextProperty = DependencyProperty.Register(
+                nameof(Text),
+                typeof(string),
+                typeof(TextBoxPlaceholderControl),
+                new FrameworkPropertyMetadata(
+                        string.Empty,
+                        FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));                
+        }
+
+
+
+        /// <summary>
         /// Текст в TextBox
         /// </summary>
         private string? _text;
         public string? Text
         {
-            get => _text;
+            get { return (string)GetValue(TextProperty); }
             set
             {
+                SetValue(TextProperty, value);
                 SetOptions(nameof(Text), ref _text, value);
             }
         }

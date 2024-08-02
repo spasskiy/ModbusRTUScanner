@@ -17,29 +17,16 @@ namespace ModbusRTUScanner.Model
     public class ViewModelManager : INotifyPropertyChanged
     {
         /// <summary>
-        /// Коллекция доступных последовательных портов
-        /// </summary>
-        public ObservableCollection<SerialPort> Ports { get; init; }
-
-        /// <summary>
         /// Настройки последовательного порта
         /// </summary>
-        public SerialPortSettings PortSettings { get; init; }
+        public SerialPortManager PortManager { get; init; }
 
         /// <summary>
         /// Менеджер флагов для главного окна ViewModel
         /// </summary>
         public MainWindowViewModelFlags FlagsManager { get; init; }
 
-        private SerialPort? _selectedPort;
-        /// <summary>
-        /// Выбранный последовательный порт
-        /// </summary>
-        public SerialPort? SelectedPort 
-        { 
-            get => _selectedPort; 
-            set => SetOptions(nameof(SelectedPort), ref _selectedPort, value);
-        }
+
 
         public ConsoleManager Console { get; init; }
 
@@ -54,15 +41,26 @@ namespace ModbusRTUScanner.Model
         /// <param name="ports">Коллекция доступных последовательных портов</param>
         /// <param name="portSettings">Настройки последовательного порта</param>
         /// <param name="flagsManager">Менеджер флагов для главного окна ViewModel</param>
-        public ViewModelManager(ObservableCollection<SerialPort> ports, SerialPortSettings portSettings, MainWindowViewModelFlags flagsManager)
+        public ViewModelManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager)
         {
-            Ports = ports;
-            PortSettings = portSettings;
+            PortManager = portManager;
             FlagsManager = flagsManager;
-            SelectedPort = ports.FirstOrDefault();
             ScanRunLockObject = new();
             Console = new();
         }
+
+        
+        public void SetDataBits(object param)
+        {
+            if(param is string str && str != PortManager.PortSettings.DataBits.ToString())
+            {
+                Console.AddNode($"DataBits переключено на {param}");
+                int.TryParse(str, out int dataBits);
+                PortManager.PortSettings.DataBits = dataBits;
+            }
+            
+        }
+
 
         #region INotifyPropertyChanged
         /// <summary>
