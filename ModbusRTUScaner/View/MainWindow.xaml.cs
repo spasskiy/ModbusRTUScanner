@@ -13,13 +13,18 @@ using ModbusRTUScanner.ViewModel;
 namespace ModbusRTUScanner
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Основное окно приложения
     /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {            
             InitializeComponent();
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show((this.DataContext as MainWindowViewModel).ViewManager.Console.ConsoleOutput);
         }
     }
 }

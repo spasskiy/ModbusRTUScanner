@@ -9,17 +9,30 @@ using System.Threading.Tasks;
 
 namespace ModbusRTUScanner.Model
 {
+    /// <summary>
+    /// Билдер для создания экземпляра ViewModelManager
+    /// </summary>
     internal class ViewModelManagerBuilder
     {
+        /// <summary>
+        /// Создает и возвращает экземпляр ViewModelManager
+        /// </summary>
+        /// <returns>Экземпляр ViewModelManager</returns>
         public ViewModelManager Build()
         {
-            ObservableCollection<SerialPort>  ports = new ObservableCollection<SerialPort>(new SerialPortUtils().GetAvailableSerialPorts());
-            SerialPortSettings portSettings = new SerialPortSettings(ports.FirstOrDefault());            
+            // Получение доступных последовательных портов
+            ObservableCollection<SerialPort> ports = new ObservableCollection<SerialPort>(new SerialPortUtils().GetAvailableSerialPorts());
+
+            // Создание настроек последовательного порта на основе первого доступного порта
+            SerialPortSettings portSettings = new SerialPortSettings(ports.FirstOrDefault());
+
+            // Создание менеджера флагов для главного окна ViewModel
             MainWindowViewModelFlags flagsManager = new MainWindowViewModelFlags();
 
-            //Привязка обработчиков смены темы оформления
+            // Привязка обработчиков смены темы оформления
             new AppThemeManager(flagsManager);
 
+            // Возвращение нового экземпляра ViewModelManager
             return new ViewModelManager(ports, portSettings, flagsManager);
         }
     }

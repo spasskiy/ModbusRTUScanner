@@ -52,14 +52,16 @@
                 <GroupBox Margin="6 0 7 0" Style="{StaticResource GroupBoxBaseStyle}" Header="COM Порт">
                     <ComboBox ItemsSource="{Binding ViewManager.Ports}"
                  DisplayMemberPath="PortName"
-                 SelectedItem="{Binding ViewManager.SelectedPort}"                        
+                 SelectedItem="{Binding ViewManager.SelectedPort, Mode=TwoWay}"                        
                  >
                     </ComboBox>
                 </GroupBox>
                 <GroupBox Grid.Row="1" Width="250" Height="260" Padding="5 10 5 0" Style="{StaticResource GroupBoxBaseStyle}" Header="Параметры подключения">
                     <StackPanel>
-                        <UniformGrid Rows="6" Columns="2">
-                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="Speed: "/>
+                        <UniformGrid Rows="7" Columns="2">
+                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="Порт: "/>
+                            <TextBox Text="{Binding ViewManager.SelectedPort.PortName, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Style="{DynamicResource TextBlockBase}" Text="Скорость: "/>
                             <TextBox Text="{Binding ViewManager.PortSettings.BaudRate}" />
                             <TextBlock Style="{DynamicResource TextBlockBase}" Text="DataBits: "/>
                             <TextBox  Text="{Binding ViewManager.PortSettings.DataBits}" />
@@ -201,6 +203,7 @@
                 <StackPanel MinHeight="200">
                     <TextBox Text="{Binding  ElementName=CustomBaudRateControl, Path=Text, UpdateSourceTrigger=PropertyChanged}"/>
                     <TreeView></TreeView>
+                    <TextBox Text="{Binding ViewManager.Console.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>                
             </GroupBox>
             <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
@@ -212,14 +215,14 @@
                 <Border Grid.Row="1" BorderBrush="{DynamicResource BackgroundBrush}" Background="{DynamicResource TextBrush}" 
                        Margin="5 0 5 5" BorderThickness="2">
                     <Grid>
-                        <controls:ConsoleTextBox Text="BLABLABLAfxcgxcfgfxcgfgxxcfg">
+                        <controls:ConsoleTextBox Text="Binding ViewManager.Console.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             
                         </controls:ConsoleTextBox>
 
                     </Grid>
                 </Border>
             </Grid>
-            <Button Grid.Column="3" Grid.Row="1" Content="ВЫХОД" Margin="0 0 -1 -1"/>
+            <Button Grid.Column="3" Grid.Row="1" Content="ВЫХОД" Margin="0 0 -1 -1" Click="Exit_Click"/>
         </Grid>
     </Grid>
 </Window>

@@ -7,18 +7,32 @@ using System.Threading.Tasks;
 
 namespace ModbusRTUScanner.Model
 {
+    /// <summary>
+    /// Управляет настройками и созданием последовательных портов
+    /// </summary>
     public class SerialPortManager
     {
+        /// <summary>
+        /// Настройки последовательного порта
+        /// </summary>
         private SerialPortSettings _settings;
 
+        /// <summary>
+        /// Конструктор класса SerialPortManager
+        /// </summary>
+        /// <param name="settings">Настройки последовательного порта</param>
         public SerialPortManager(SerialPortSettings settings)
         {
             _settings = settings;
         }
 
+        /// <summary>
+        /// Возвращает объект SerialPort на основе текущих настроек
+        /// </summary>
+        /// <returns>Объект SerialPort или null, если имя порта "None"</returns>
         public SerialPort? GetPort()
         {
-            if(_settings.PortName == "None")
+            if (_settings.PortName == "None")
                 return null;
             return new SerialPort
             {
@@ -32,6 +46,10 @@ namespace ModbusRTUScanner.Model
             };
         }
 
+        /// <summary>
+        /// Применяет текущие настройки к указанному объекту SerialPort
+        /// </summary>
+        /// <param name="serialPort">Объект SerialPort, к которому применяются настройки</param>
         public void ApplySettingsToSerialPort(SerialPort serialPort)
         {
             if (serialPort.PortName == _settings.PortName)

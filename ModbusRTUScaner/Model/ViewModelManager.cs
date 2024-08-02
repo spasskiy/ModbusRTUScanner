@@ -11,14 +11,49 @@ using System.Threading.Tasks;
 
 namespace ModbusRTUScanner.Model
 {
+    /// <summary>
+    /// Менеджер ViewModel для главного окна
+    /// </summary>
     public class ViewModelManager : INotifyPropertyChanged
-    {        
-          
+    {
+        /// <summary>
+        /// Коллекция доступных последовательных портов
+        /// </summary>
         public ObservableCollection<SerialPort> Ports { get; init; }
-        public SerialPortSettings PortSettings { get; init; }
-        public MainWindowViewModelFlags FlagsManager { get; init; }
-        public SerialPort? SelectedPort { get; set; }
 
+        /// <summary>
+        /// Настройки последовательного порта
+        /// </summary>
+        public SerialPortSettings PortSettings { get; init; }
+
+        /// <summary>
+        /// Менеджер флагов для главного окна ViewModel
+        /// </summary>
+        public MainWindowViewModelFlags FlagsManager { get; init; }
+
+        private SerialPort? _selectedPort;
+        /// <summary>
+        /// Выбранный последовательный порт
+        /// </summary>
+        public SerialPort? SelectedPort 
+        { 
+            get => _selectedPort; 
+            set => SetOptions(nameof(SelectedPort), ref _selectedPort, value);
+        }
+
+        public ConsoleManager Console { get; init; }
+
+        /// <summary>
+        /// Объект для блокировки при выполнении сканирования
+        /// </summary>
+        public object ScanRunLockObject;
+
+        /// <summary>
+        /// Конструктор класса ViewModelManager
+        /// </summary>
+        /// <param name="ports">Коллекция доступных последовательных портов</param>
+        /// <param name="portSettings">Настройки последовательного порта</param>
+        /// <param name="flagsManager">Менеджер флагов для главного окна ViewModel</param>
         public ViewModelManager(ObservableCollection<SerialPort> ports, SerialPortSettings portSettings, MainWindowViewModelFlags flagsManager)
         {
             Ports = ports;
@@ -26,23 +61,35 @@ namespace ModbusRTUScanner.Model
             FlagsManager = flagsManager;
             SelectedPort = ports.FirstOrDefault();
             ScanRunLockObject = new();
+            Console = new();
         }
 
-        public object ScanRunLockObject;
-
-
         #region INotifyPropertyChanged
+        /// <summary>
+        /// Событие, возникающее при изменении свойства
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        /// <summary>
+        /// Вызывает событие PropertyChanged
+        /// </summary>
+        /// <param name="e">Аргументы события</param>
         protected void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             PropertyChanged?.Invoke(this, e);
         }
 
-        protected void SetOptions<T>(string Property, ref T variable, T value)
+        /// <summary>
+        /// Устанавливает значение свойства и вызывает событие PropertyChanged
+        /// </summary>
+        /// <typeparam name="T">Тип свойства</typeparam>
+        /// <param name="property">Имя свойства</param>
+        /// <param name="variable">Ссылка на переменную свойства</param>
+        /// <param name="value">Новое значение свойства</param>
+        protected void SetOptions<T>(string property, ref T variable, T value)
         {
             variable = value;
-            OnPropertyChanged(new PropertyChangedEventArgs(Property));
+            OnPropertyChanged(new PropertyChangedEventArgs(property));
         }
         #endregion
     }

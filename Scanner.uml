@@ -16,6 +16,7 @@ namespace View{
 
         }
         ConsoleTextBox <-- MainWindow
+        
         class TextBoxPlaceholderControl{
 
         }
@@ -68,18 +69,32 @@ namespace Model{
     class AppThemeManager{
 
     }
+    ViewModelManagerBuilder <-- AppThemeManager
+
+    class ConsoleManager{
+
+    }
+    ViewModelManager o-- ConsoleManager
+    class ConsoleNode{
+
+    }
+    ConsoleManager <-- ConsoleNode
 
     class DeviceConnectionSettings{
 
     }
+   ScannerModel o-- DeviceConnectionSettings
 
     class MainWindowViewModelFlags{
 
     }
+    ViewModelManager o-- MainWindowViewModelFlags
+
 
     class RelayCommand{
 
     }
+    MainWindowViewModel o-- RelayCommand
 
     class ScannerModel{
 
@@ -92,18 +107,23 @@ namespace Model{
     class SerialPortGetter{
 
     }
+    SerialPortSettings <-- SerialPortGetter
 
     class SerialPortManager{
 
     }
+    ViewModelManager <-- SerialPortManager
+    ViewModelManagerBuilder <-- SerialPortManager
 
     class SerialPortSettings{
 
     }
+    SerialPortManager <-- SerialPortSettings
 
     class SerialPortUtils{
 
     }
+    ViewModelManagerBuilder <--- SerialPortUtils
 
     class ViewModelManager{
 
@@ -119,10 +139,9 @@ namespace Model{
 }
 
 MainWindow o-- MainWindowViewModel
-MainWindowViewModel o-- RelayCommand
+
 MainWindowViewModel o-- ViewModelManager
 MainWindowViewModel <-- ViewModelManagerBuilder
-ViewModelManagerBuilder o- ViewModelManager
-ViewModelManagerBuilder <-- AppThemeManager
+ViewModelManagerBuilder -> ViewModelManager
 ViewModelManager o-- AppThemeManager
 @enduml

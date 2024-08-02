@@ -12,6 +12,10 @@ namespace ModbusRTUScanner.Model
     /// </summary>
     internal class SerialPortGetter
     {
+        /// <summary>
+        /// Возвращает имя первого доступного последовательного порта в системе
+        /// </summary>
+        /// <returns>Имя первого последовательного порта или "None", если портов нет</returns>
         public string GetFirstPortName()
         {
             string result = "None";
@@ -23,6 +27,10 @@ namespace ModbusRTUScanner.Model
             return result;
         }
 
+        /// <summary>
+        /// Возвращает имена всех доступных последовательных портов в системе
+        /// </summary>
+        /// <returns>Массив имен последовательных портов</returns>
         public string[] GetAllPortsNames()
         {
             return SerialPort.GetPortNames();
