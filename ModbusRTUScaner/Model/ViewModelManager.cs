@@ -8,14 +8,20 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ModbusRTUScanner.Model
 {
     /// <summary>
     /// Менеджер ViewModel для главного окна
     /// </summary>
-    public class ViewModelManager : INotifyPropertyChanged
+    public class ViewModelManager
     {
+        /// <summary>
+        /// Менеджер команд
+        /// </summary>
+        public ScannerCommandManager CommandManager { get; init; }
+
         /// <summary>
         /// Настройки последовательного порта
         /// </summary>
@@ -27,13 +33,8 @@ namespace ModbusRTUScanner.Model
         public MainWindowViewModelFlags FlagsManager { get; init; }
 
 
+        public ConsoleManager ScannerConsole { get; init; }
 
-        public ConsoleManager Console { get; init; }
-
-        /// <summary>
-        /// Объект для блокировки при выполнении сканирования
-        /// </summary>
-        public object ScanRunLockObject;
 
         /// <summary>
         /// Конструктор класса ViewModelManager
@@ -41,54 +42,13 @@ namespace ModbusRTUScanner.Model
         /// <param name="ports">Коллекция доступных последовательных портов</param>
         /// <param name="portSettings">Настройки последовательного порта</param>
         /// <param name="flagsManager">Менеджер флагов для главного окна ViewModel</param>
-        public ViewModelManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager)
-        {
-            PortManager = portManager;
+        public ViewModelManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager, ConsoleManager consoleManager, ScannerCommandManager scannerCommandManager)
+        {            
             FlagsManager = flagsManager;
-            ScanRunLockObject = new();
-            Console = new();
+            ScannerConsole = consoleManager;
+            PortManager = portManager;
+            CommandManager = scannerCommandManager;
         }
 
-        
-        public void SetDataBits(object param)
-        {
-            if(param is string str && str != PortManager.PortSettings.DataBits.ToString())
-            {
-                Console.AddNode($"DataBits переключено на {param}");
-                int.TryParse(str, out int dataBits);
-                PortManager.PortSettings.DataBits = dataBits;
-            }
-            
-        }
-
-
-        #region INotifyPropertyChanged
-        /// <summary>
-        /// Событие, возникающее при изменении свойства
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        /// <summary>
-        /// Вызывает событие PropertyChanged
-        /// </summary>
-        /// <param name="e">Аргументы события</param>
-        protected void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// Устанавливает значение свойства и вызывает событие PropertyChanged
-        /// </summary>
-        /// <typeparam name="T">Тип свойства</typeparam>
-        /// <param name="property">Имя свойства</param>
-        /// <param name="variable">Ссылка на переменную свойства</param>
-        /// <param name="value">Новое значение свойства</param>
-        protected void SetOptions<T>(string property, ref T variable, T value)
-        {
-            variable = value;
-            OnPropertyChanged(new PropertyChangedEventArgs(property));
-        }
-        #endregion
     }
 }

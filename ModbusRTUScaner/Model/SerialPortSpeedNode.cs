@@ -9,8 +9,8 @@ namespace ModbusRTUScanner.Model
 {
     public class SerialPortSpeedNode : INotifyPropertyChanged
     {
-        private long? _portSpeed;
-        public long? PortSpeed
+        private int? _portSpeed;
+        public int? PortSpeed
         {
             get => _portSpeed;
             set => SetOptions(nameof(PortSpeed), ref _portSpeed, value);
@@ -22,7 +22,7 @@ namespace ModbusRTUScanner.Model
             get => _isSelected;
             set => SetOptions(nameof(IsSelected), ref _isSelected, value);
         }
-        public SerialPortSpeedNode(long? speed = null) { _portSpeed = speed; }
+        public SerialPortSpeedNode(int? speed = null) { _portSpeed = speed; }
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -57,11 +57,11 @@
                  >
                     </ComboBox>
                 </GroupBox>
-                <GroupBox Grid.Row="1" Width="250" Height="260" Padding="5 10 5 0" Style="{StaticResource GroupBoxBaseStyle}" Header="Параметры подключения">
+                <GroupBox Grid.Row="1" Width="250" Height="280" Padding="5 10 5 0" Style="{StaticResource GroupBoxBaseStyle}" Header="Параметры подключения">
                     <StackPanel>
                         <UniformGrid Rows="7" Columns="2">
                             <TextBlock Style="{DynamicResource TextBlockBase}" Text="Порт: "/>
-                            <TextBlock Style="{DynamicResource TextBlockVal}" Text="{Binding ViewManager.PortManager.PortSettings.PortName, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Style="{DynamicResource TextBlockVal}" Text="{Binding ViewManager.PortManager.SelectedPort.PortName, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Style="{DynamicResource TextBlockBase}" Text="Скорость: "/>
                             <TextBlock Style="{DynamicResource TextBlockVal}" Text="{Binding ViewManager.PortManager.PortSettings.BaudRate}" />
                             <TextBlock Style="{DynamicResource TextBlockBase}" Text="DataBits: "/>
@@ -74,18 +74,18 @@
                         <Expander Header="Таймауты :" Margin="0 -30 0 0">
                             <UniformGrid Rows="2" Columns="2">
                                 <TextBlock Style="{DynamicResource TextBlockBase}" Text="WriteTimeout: "/>
-                                <TextBox  Text="{Binding ViewManager.PortSettings.WriteTimeout}" />
+                                <TextBox  Text="{Binding ViewManager.PortManager.PortSettings.WriteTimeout}" />
                                 <TextBlock Style="{DynamicResource TextBlockBase}" Text="ReadTimeout: "/>
-                                <TextBox  Text="{Binding ViewManager.PortSettings.ReadTimeout}" />
+                                <TextBox  Text="{Binding ViewManager.PortManager.PortSettings.ReadTimeout}" />
                             </UniformGrid>
                         </Expander>
                     </StackPanel>
                 </GroupBox>
-                <Button Grid.Row="2" Margin="5 0 0 0" Content="ПОИСК" Command="{Binding FindDevicesCommand}" Visibility="{Binding ViewManager.FlagsManager.IsScanRun, Converter={StaticResource BooleanToVisibilityReverseConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Grid.Row="2" Margin="5 0 0 0" Content="ОТМЕНА" Command="{Binding CancelCommand}" Visibility="{Binding ViewManager.FlagsManager.IsScanRun, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <Button Grid.Row="2" Margin="5 10 0 10" Content="ПОИСК" Command="{Binding ViewManager.CommandManager.FindDevicesCommand}" Visibility="{Binding ViewManager.FlagsManager.IsScanRun, Converter={StaticResource BooleanToVisibilityReverseConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Row="2" Margin="5 10 0 10" Content="ОТМЕНА" Command="{Binding ViewManager.CommandManager.CancelCommand}" Visibility="{Binding ViewManager.FlagsManager.IsScanRun, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 <Button Grid.Row="3" Style="{StaticResource NightButtonStyle}"  
              Width="101"
-             Command="{Binding SwitchThemeCommand}"
+             Command="{Binding ViewManager.CommandManager.SwitchThemeCommand}"
              BorderThickness="0">
                     <Button.Content>
                         <Image>
@@ -160,21 +160,21 @@
             <StackPanel Grid.Row="0" Grid.Column="2" >
                 <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Data bits">
                     <StackPanel>
-                        <RadioButton Content="7" Command="{Binding SetDataBitsCommand}" CommandParameter="7"/>
-                        <RadioButton  Content="8" Command="{Binding SetDataBitsCommand}" CommandParameter="8" IsChecked="True"/>
+                        <RadioButton Content="7" Command="{Binding ViewManager.CommandManager.SetDataBitsCommand}" CommandParameter="7"/>
+                        <RadioButton  Content="8" Command="{Binding ViewManager.CommandManager.SetDataBitsCommand}" CommandParameter="8" IsChecked="True"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Parity">
                     <StackPanel>
-                        <RadioButton Content="None" Command="{Binding SetParityCommand}" IsChecked="True"/>
-                        <RadioButton Content="Ode" Command="{Binding SetParityCommand}"/>
-                        <RadioButton Content="Even" Command="{Binding SetParityCommand}" />
+                        <RadioButton Content="None" Command="{Binding ViewManager.CommandManager.SetParityCommand}" CommandParameter="None" IsChecked="True"/>
+                        <RadioButton Content="Odd" Command="{Binding ViewManager.CommandManager.SetParityCommand}" CommandParameter="Odd"/>
+                        <RadioButton Content="Even" Command="{Binding ViewManager.CommandManager.SetParityCommand}" CommandParameter="Even" />
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Stop bits">
                     <StackPanel>
-                        <RadioButton Content="1" IsChecked="True"/>
-                        <RadioButton  Content="2"/>
+                        <RadioButton Content="1" Command="{Binding ViewManager.CommandManager.SetStopBitsCommand}" CommandParameter="1" IsChecked="True"/>
+                        <RadioButton  Content="2" Command="{Binding ViewManager.CommandManager.SetStopBitsCommand}" CommandParameter="2"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Style="{StaticResource GroupBoxBaseStyle}" Header="Диапазон адресов">
@@ -185,7 +185,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBox Grid.Column="0" Width="50" Padding="3" Text="{Binding ElementName=MyRangeSlider, Path=LowerValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:N0}'}" />
-                        <MahApps:RangeSlider x:Name="MyRangeSlider" Grid.Column="1" Minimum="0" Maximum="255" ExtendedMode="True" LowerValue="0" UpperValue="255" SmallChange="1"
+                        <MahApps:RangeSlider x:Name="MyRangeSlider" Grid.Column="1" Minimum="{Binding ViewManager.PortManager.ModbusStartAddress}" Maximum="{Binding ViewManager.PortManager.ModbusEndAddress}" ExtendedMode="True" LowerValue="0" UpperValue="255" SmallChange="1"
                                              Margin="0 5" MahApps:SliderHelper.ThumbFillBrush="{DynamicResource CheckboxIsMouseOverBorderBrush}" MahApps:SliderHelper.ThumbFillHoverBrush="{DynamicResource CheckBoxIsCheckedBorderBrush}"
                                              MahApps:SliderHelper.ThumbFillPressedBrush="{DynamicResource ButtonUderMouse}"                                             
                                              >
@@ -213,12 +213,12 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <ProgressBar Style="{StaticResource MainProgressBarStyle}"></ProgressBar>
+                <ProgressBar Style="{StaticResource MainProgressBarStyle}" Minimum="{Binding ViewManager.PortManager.ModbusStartAddress}" Maximum="{Binding ViewManager.PortManager.ModbusEndAddress}" Value="{Binding ViewManager.PortManager.CurrentAddress}" Margin="5"></ProgressBar>
                 <Border Grid.Row="1" BorderBrush="{DynamicResource BackgroundBrush}" Background="{DynamicResource TextBrush}" 
                        Margin="5 0 5 5" BorderThickness="2">
                     <Grid>
                         <!---Какие-то заморочки с объектом в привязке-->
-                        <controls:ConsoleTextBox Text="{Binding ViewManager.Console.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <controls:ConsoleTextBox Text="{Binding ViewManager.ScannerConsole.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <!--<controls:ConsoleTextBox Text="{Binding ElementName=ThisWindow, Path=DataContext.ViewManager.Console.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
                     </Grid>
                 </Border>

@@ -23,8 +23,11 @@ namespace ModbusRTUScanner.Model
             // Получение доступных последовательных портов
             ObservableCollection<SerialPort> ports = new ObservableCollection<SerialPort>(new SerialPortUtils().GetAvailableSerialPorts());
 
+            // Создание консоли
+            ConsoleManager scannerConsole = new ConsoleManager();
+            
             // Создание настроек последовательного порта на основе первого доступного порта
-            SerialPortManager portSettings = new SerialPortManager(ports, new SerialPortSettings(ports.FirstOrDefault()));
+            SerialPortManager portManager = new SerialPortManager(ports, new SerialPortSettings(ports.FirstOrDefault()), scannerConsole);
 
             // Создание менеджера флагов для главного окна ViewModel
             MainWindowViewModelFlags flagsManager = new MainWindowViewModelFlags();
@@ -32,8 +35,11 @@ namespace ModbusRTUScanner.Model
             // Привязка обработчиков смены темы оформления
             new AppThemeManager(flagsManager);
 
+            // Создание менеджера команд для главного окна ViewModel
+            ScannerCommandManager scannerCommandManager = new ScannerCommandManager(portManager, flagsManager);
+
             // Возвращение нового экземпляра ViewModelManager
-            return new ViewModelManager(portSettings, flagsManager);
+            return new ViewModelManager(portManager, flagsManager, scannerConsole, scannerCommandManager);
         }
     }
 }

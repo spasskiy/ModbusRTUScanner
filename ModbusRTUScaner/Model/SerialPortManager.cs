@@ -14,6 +14,33 @@ namespace ModbusRTUScanner.Model
     /// </summary>
     public class SerialPortManager : INotifyPropertyChanged
     {
+        private ConsoleManager _scannerConsole;
+
+        private int _currentAddress;
+        public int CurrentAddress
+        {
+            get => _currentAddress;
+            set => SetOptions(nameof(CurrentAddress), ref _currentAddress, value);
+        }
+
+        private int _modbusStartAddress;
+        /// <summary>
+        /// Начальный адрес поиска
+        /// </summary>
+        public int ModbusStartAddress
+        {
+            get => _modbusStartAddress;
+            set => SetOptions(nameof(ModbusStartAddress), ref _modbusStartAddress, value);
+        }
+        private int _modbusEndAddress;
+        /// <summary>
+        /// Конечный адрес поиска
+        /// </summary>
+        public int ModbusEndAddress
+        {
+            get => _modbusEndAddress;
+            set => SetOptions(nameof(ModbusEndAddress), ref _modbusEndAddress, value);
+        }
 
         /// <summary>
         /// Коллекция доступных последовательных портов
@@ -36,12 +63,16 @@ namespace ModbusRTUScanner.Model
         /// Конструктор класса SerialPortManager
         /// </summary>
         /// <param name="settings">Настройки последовательного порта</param>
-        public SerialPortManager(ObservableCollection<SerialPort> ports, SerialPortSettings settings)
+        public SerialPortManager(ObservableCollection<SerialPort> ports, SerialPortSettings settings, ConsoleManager scannerConsole)
         {
+            _scannerConsole = scannerConsole;
             Ports = ports;
             SelectedPort = Ports.FirstOrDefault();
             _portSettings = settings;
             SerialPortSpeeds = new SerialPortSpeedNodeBuilder().Build();
+            ModbusStartAddress = 0;
+            ModbusEndAddress = 255;
+            CurrentAddress = ModbusStartAddress;
         }
 
         private SerialPort? _selectedPort;
@@ -54,40 +85,78 @@ namespace ModbusRTUScanner.Model
             set => SetOptions(nameof(SelectedPort), ref _selectedPort, value);
         }
 
-        /// <summary>
-        /// Возвращает объект SerialPort на основе текущих настроек
-        /// </summary>
-        /// <returns>Объект SerialPort или null, если имя порта "None"</returns>
-        public SerialPort? GetPort()
-        {
-            if (_portSettings.PortName == "None")
-                return null;
-            return new SerialPort
-            {
-                PortName = _portSettings.PortName,
-                BaudRate = _portSettings.BaudRate,
-                DataBits = _portSettings.DataBits,
-                StopBits = _portSettings.StopBits,
-                Parity = _portSettings.Parity,
-                WriteTimeout = _portSettings.WriteTimeout,
-                ReadTimeout = _portSettings.ReadTimeout
-            };
-        }
+
 
         /// <summary>
         /// Применяет текущие настройки к указанному объекту SerialPort
         /// </summary>
         /// <param name="serialPort">Объект SerialPort, к которому применяются настройки</param>
-        public void ApplySettingsToSerialPort(SerialPort serialPort)
+        public void ApplySettingsToSerialPort(SerialPort serialPort, int baudRate)
         {
             if (serialPort.PortName == _portSettings.PortName)
             {
-                serialPort.BaudRate = _portSettings.BaudRate;
+                serialPort.BaudRate = baudRate;
                 serialPort.DataBits = _portSettings.DataBits;
                 serialPort.StopBits = _portSettings.StopBits;
                 serialPort.Parity = _portSettings.Parity;
                 serialPort.WriteTimeout = _portSettings.WriteTimeout;
                 serialPort.ReadTimeout = _portSettings.ReadTimeout;
+            }
+        }
+
+        public void SetDataBits(object param)
+        {
+            if (param is string str && str != PortSettings.DataBits.ToString())
+            {
+                _scannerConsole.AddNode($"DataBits переключено на {param}");
+                int.TryParse(str, out int dataBits);
+                PortSettings.DataBits = dataBits;
+            }
+        }
+
+        public void SetParity(object param)
+        {
+            if (param is string str)
+            {
+                switch (str)
+                {
+                    case "None":
+                        _scannerConsole.AddNode("Parity переключено на None");
+                        PortSettings.Parity = Parity.None;
+                        break;
+                    case "Even":
+                        _scannerConsole.AddNode("Parity переключено на Even");
+                        PortSettings.Parity = Parity.Even;
+                        break;
+                    case "Odd":
+                        _scannerConsole.AddNode("Parity переключено на Odd");
+                        PortSettings.Parity = Parity.Odd;
+                        break;
+                    default:
+                        _scannerConsole.AddNode("Ошибка выбора Parity!");
+                        break;
+                }
+            }
+        }
+
+        public void SetStopBits(object param)
+        {
+            if (param is string str)
+            {
+                switch (str)
+                {
+                    case "1":
+                        _scannerConsole.AddNode("StopBits переключено на One");
+                        PortSettings.StopBits = StopBits.One;
+                        break;
+                    case "2":
+                        _scannerConsole.AddNode("StopBits переключено на Two");
+                        PortSettings.StopBits = StopBits.Two;
+                        break;
+                    default:
+                        _scannerConsole.AddNode("Ошибка выбора StopBits!");
+                        break;
+                }
             }
         }
 

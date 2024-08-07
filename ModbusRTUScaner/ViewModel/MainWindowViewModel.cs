@@ -15,26 +15,6 @@ namespace ModbusRTUScanner.ViewModel
     public partial class MainWindowViewModel
     {
         /// <summary>
-        /// Команда для переключения темы.
-        /// </summary>
-        private readonly RelayCommand<object> _switchThemeCommand;
-
-        /// <summary>
-        /// Команда для поиска устройств.
-        /// </summary>
-        private readonly RelayCommand<object> _findDevicesCommand;
-
-        /// <summary>
-        /// Команда для отмены операции.
-        /// </summary>
-        private readonly RelayCommand<object> _cancelCommand;
-
-        /// <summary>
-        /// Команда уста
-        /// </summary>
-        private readonly RelayCommand<object> _setDataBitsCommand;
-
-        /// <summary>
         /// Менеджер ViewModel.
         /// </summary>
         public ViewModelManager ViewManager { get; init; }
@@ -44,62 +24,8 @@ namespace ModbusRTUScanner.ViewModel
         /// </summary>
         public MainWindowViewModel()
         {
-            // Инициализация свойств
-            ViewManager = new ViewModelManagerBuilder().Build();
-
-            // Инициализация команд
-            _switchThemeCommand = new RelayCommand<object>((_) => ViewManager.FlagsManager.IsNightModeOn = !ViewManager.FlagsManager.IsNightModeOn);
-            _findDevicesCommand = new RelayCommand<object>(FindDevices);
-            _cancelCommand = new RelayCommand<object>((_) => MessageBox.Show("CancelCommand"));
-            _setDataBitsCommand = new RelayCommand<object>(ViewManager.SetDataBits);
+            ViewManager = new ViewModelManagerBuilder().Build(); 
         }
-
-        /// <summary>
-        /// Команда для переключения темы.
-        /// </summary>
-        public ICommand SwitchThemeCommand => _switchThemeCommand;
-
-        /// <summary>
-        /// Команда для поиска устройств.
-        /// </summary>
-        public ICommand FindDevicesCommand => _findDevicesCommand;
-
-        /// <summary>
-        /// Команда для отмены операции.
-        /// </summary>
-        public ICommand CancelCommand => _cancelCommand;
-
-        /// <summary>
-        /// Команда установки DataBits
-        /// </summary>
-        public ICommand SetDataBitsCommand => _setDataBitsCommand;
-
-
-
-
-        /// <summary>
-        /// Метод для поиска устройств.
-        /// </summary>
-        /// <param name="obj">Параметр команды.</param>
-        private async void FindDevices(object obj)
-        {
-            ViewManager.Console.AddNode("FindDevicesCommand");
-            //await Task.Run(() =>
-            //{
-            //    lock (ViewManager.ScanRunLockObject)
-            //    {
-            //        try
-            //        {
-            //            ViewManager.FlagsManager.IsScanRun = true;
-            //            MessageBox.Show("FindDevicesCommand");
-            //            Task.Delay(5000).Wait();
-            //        }
-            //        finally
-            //        {
-            //            ViewManager.FlagsManager.IsScanRun = false;
-            //        }
-            //    }
-            //});
-        }
+      
     }
 }

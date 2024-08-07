@@ -23,11 +23,11 @@ namespace ModbusRTUScanner.Model
             set => SetOptions(nameof(PortName), ref _portName, value);
         }
 
-        private int _baudRate;
+        private string _baudRate;
         /// <summary>
         /// Скорость передачи данных (бод)
         /// </summary>
-        public int BaudRate
+        public string BaudRate
         { 
             get => _baudRate;
             set => SetOptions(nameof(BaudRate), ref _baudRate, value);
@@ -89,7 +89,7 @@ namespace ModbusRTUScanner.Model
         public SerialPortSettings()
         {
             PortName = new SerialPortGetter().GetFirstPortName();
-            BaudRate = 9600;
+            BaudRate = "9600+";
             DataBits = 8;
             StopBits = StopBits.One;
             Parity = Parity.None;
@@ -115,7 +115,7 @@ namespace ModbusRTUScanner.Model
             if (serialPort is not null)
             {
                 PortName = serialPort.PortName;
-                BaudRate = serialPort.BaudRate;
+                BaudRate = serialPort.BaudRate.ToString();
                 DataBits = serialPort.DataBits;
                 StopBits = serialPort.StopBits;
                 Parity = serialPort.Parity;
