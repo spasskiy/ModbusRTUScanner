@@ -32,9 +32,12 @@ namespace ModbusRTUScanner.Model
         /// </summary>
         public MainWindowViewModelFlags FlagsManager { get; init; }
 
-
+        /// <summary>
+        /// Консоль
+        /// </summary>
         public ConsoleManager ScannerConsole { get; init; }
 
+        public DeviceManager Devices { get; init; }
 
         /// <summary>
         /// Конструктор класса ViewModelManager
@@ -42,12 +45,13 @@ namespace ModbusRTUScanner.Model
         /// <param name="ports">Коллекция доступных последовательных портов</param>
         /// <param name="portSettings">Настройки последовательного порта</param>
         /// <param name="flagsManager">Менеджер флагов для главного окна ViewModel</param>
-        public ViewModelManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager, ConsoleManager consoleManager, ScannerCommandManager scannerCommandManager)
+        public ViewModelManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager, ConsoleManager consoleManager, ScannerCommandManager scannerCommandManager, DeviceManager devices)
         {            
             FlagsManager = flagsManager;
             ScannerConsole = consoleManager;
             PortManager = portManager;
             CommandManager = scannerCommandManager;
+            Devices = devices;
         }
 
     }

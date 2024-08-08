@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows;
 
-namespace ModbusMonitor.View.Style
+namespace ModbusRTUScanner.View.Style
 {
     public partial class CustomWindow : ResourceDictionary
     {

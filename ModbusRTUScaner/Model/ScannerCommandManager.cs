@@ -13,22 +13,24 @@ namespace ModbusRTUScanner.Model
         /// <summary>
         /// Токен отмены
         /// </summary>
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource? _cancellationTokenSource;
         public ICommand SwitchThemeCommand { get; }
         public ICommand FindDevicesCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand SetDataBitsCommand { get; }
         public ICommand SetParityCommand { get; }
         public ICommand SetStopBitsCommand { get; }
+        public ICommand UpdatePortsCommand { get; }
 
         public ScannerCommandManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager)
         {
             SwitchThemeCommand = new RelayCommand<object>((_) => flagsManager.IsNightModeOn = !flagsManager.IsNightModeOn);
-            FindDevicesCommand = new RelayCommand<object>((_) => System.Windows.MessageBox.Show("FindDevicesCommand"));
+            FindDevicesCommand = new RelayCommand<object>((_) => new DeviceFinder().Find());
             CancelCommand = new RelayCommand<object>((_) => System.Windows.MessageBox.Show("CancelCommand"));
             SetDataBitsCommand = new RelayCommand<object>(portManager.SetDataBits);
             SetParityCommand = new RelayCommand<object>(portManager.SetParity);
             SetStopBitsCommand = new RelayCommand<object>(portManager.SetStopBits);
+            UpdatePortsCommand = new RelayCommand<object>(portManager.UpdatePorts);
         }
 
         /// <summary>

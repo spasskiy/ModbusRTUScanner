@@ -32,4 +32,6 @@
     <SolidColorBrush x:Key="CoilBackground" Color="#DDFFDD"/>
     <SolidColorBrush x:Key="DiscreteInputBackground" Color="#FFDDFF"/>
 
+    <SolidColorBrush x:Key="ProgressBarBrush" Color="#6B6BC3"/>
+
 </ResourceDictionary>

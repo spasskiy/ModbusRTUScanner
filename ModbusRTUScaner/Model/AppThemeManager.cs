@@ -19,6 +19,14 @@ namespace ModbusRTUScanner.Model
         public AppThemeManager(MainWindowViewModelFlags flagsManager)
         {
             _flagsManager = flagsManager;
+            
+        }
+
+        /// <summary>
+        /// Подписывает на событие изменения темы
+        /// </summary>
+        public void SetThemeChangedEvent()
+        {
             _flagsManager.ThemeChanged += OnThemeChanged;
         }
 

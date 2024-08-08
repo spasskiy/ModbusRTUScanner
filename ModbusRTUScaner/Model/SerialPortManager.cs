@@ -45,7 +45,11 @@ namespace ModbusRTUScanner.Model
         /// <summary>
         /// Коллекция доступных последовательных портов
         /// </summary>
-        public ObservableCollection<SerialPort> Ports { get; init; }
+        public ObservableCollection<SerialPort> Ports 
+        { 
+            get; 
+            init; 
+        }
 
         /// <summary>
         /// Настройки последовательного порта
@@ -121,16 +125,25 @@ namespace ModbusRTUScanner.Model
                 switch (str)
                 {
                     case "None":
-                        _scannerConsole.AddNode("Parity переключено на None");
-                        PortSettings.Parity = Parity.None;
+                        if(PortSettings.Parity != Parity.None)
+                        {
+                            _scannerConsole.AddNode("Parity переключено на None");
+                            PortSettings.Parity = Parity.None;
+                        }
                         break;
                     case "Even":
-                        _scannerConsole.AddNode("Parity переключено на Even");
-                        PortSettings.Parity = Parity.Even;
+                        if (PortSettings.Parity != Parity.Even)
+                        {
+                            _scannerConsole.AddNode("Parity переключено на Even");
+                            PortSettings.Parity = Parity.Even;
+                        }
                         break;
                     case "Odd":
-                        _scannerConsole.AddNode("Parity переключено на Odd");
-                        PortSettings.Parity = Parity.Odd;
+                        if (PortSettings.Parity != Parity.Odd)
+                        {
+                            _scannerConsole.AddNode("Parity переключено на Odd");
+                            PortSettings.Parity = Parity.Odd;
+                        }
                         break;
                     default:
                         _scannerConsole.AddNode("Ошибка выбора Parity!");
@@ -146,17 +159,32 @@ namespace ModbusRTUScanner.Model
                 switch (str)
                 {
                     case "1":
-                        _scannerConsole.AddNode("StopBits переключено на One");
-                        PortSettings.StopBits = StopBits.One;
+                        if(PortSettings.StopBits != StopBits.One)
+                        {
+                            _scannerConsole.AddNode("StopBits переключено на One");
+                            PortSettings.StopBits = StopBits.One;
+                        }
                         break;
                     case "2":
-                        _scannerConsole.AddNode("StopBits переключено на Two");
-                        PortSettings.StopBits = StopBits.Two;
+                        if (PortSettings.StopBits != StopBits.Two)
+                        {
+                            _scannerConsole.AddNode("StopBits переключено на Two");
+                            PortSettings.StopBits = StopBits.Two;
+                        }
                         break;
                     default:
                         _scannerConsole.AddNode("Ошибка выбора StopBits!");
                         break;
                 }
+            }
+        }
+
+        public void UpdatePorts(object param)
+        {
+            Ports.Clear();
+            foreach (var port in SerialPort.GetPortNames())
+            {
+                Ports.Add(new SerialPort(port));
             }
         }
 

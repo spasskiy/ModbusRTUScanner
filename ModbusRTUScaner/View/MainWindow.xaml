@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ModbusRTUScanner"
         xmlns:converters="clr-namespace:ModbusRTUScanner.View.Converters"
         xmlns:controls="clr-namespace:ModbusRTUScanner.View.Controls"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:MahApps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Style="{StaticResource CustomWindowStyle}"
         DataContext="{DynamicResource MainWindowViewModel}"    
@@ -33,7 +34,7 @@
              />
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="4*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -55,6 +56,11 @@
                  DisplayMemberPath="PortName"
                  SelectedItem="{Binding ViewManager.PortManager.SelectedPort, Mode=TwoWay}"                        
                  >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="DropDownOpened">
+                                <i:InvokeCommandAction Command="{Binding ViewManager.CommandManager.UpdatePortsCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </ComboBox>
                 </GroupBox>
                 <GroupBox Grid.Row="1" Width="250" Height="280" Padding="5 10 5 0" Style="{StaticResource GroupBoxBaseStyle}" Header="Параметры подключения">
@@ -197,23 +203,25 @@
                 </GroupBox>
             </StackPanel>
             <GroupBox Grid.Row="0" Grid.Column="3" Style="{StaticResource GroupBoxBaseStyle}" Header="Результаты сканирования" Margin="5 0">
-                <StackPanel MinHeight="200">
-                    <TextBox Text="{Binding  ElementName=CustomBaudRateControl, Path=Text, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TreeView></TreeView>
-                    <Border BorderBrush="Red" BorderThickness="2">
-                        <TextBox x:Name="TB1" Text="{Binding ViewManager.PortManager.SerialPortSpeeds[16].PortSpeed}"/>
-                    </Border>
-
-                    <TextBox x:Name="TB2" Text="{Binding ViewManager.PortManager.SerialPortSpeeds[16].PortSpeed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBox x:Name="TB3" Text="{Binding ViewManager.PortManager.SerialPortSpeeds[16].PortSpeed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <TreeView ItemsSource="{Binding ViewManager.Devices.Devices}">
+                        <TreeView.Resources>
+                            <ResourceDictionary Source="Styles/ModbusDeviceTreeViewTemplate.xaml"/>
+                        </TreeView.Resources>
+                        <TreeView.ItemTemplate>
+                            <DynamicResource ResourceKey="ModbusDeviceTemplate"/>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </ScrollViewer>
             </GroupBox>
             <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <ProgressBar Style="{StaticResource MainProgressBarStyle}" Minimum="{Binding ViewManager.PortManager.ModbusStartAddress}" Maximum="{Binding ViewManager.PortManager.ModbusEndAddress}" Value="{Binding ViewManager.PortManager.CurrentAddress}" Margin="5"></ProgressBar>
+                <ProgressBar Style="{StaticResource MainProgressBarStyle}" Minimum="{Binding ViewManager.PortManager.ModbusStartAddress}" 
+                             Maximum="{Binding ViewManager.PortManager.ModbusEndAddress}" Value="{Binding ViewManager.PortManager.CurrentAddress}" 
+                             Margin="5" Foreground="{DynamicResource ProgressBarBrush}"/>
                 <Border Grid.Row="1" BorderBrush="{DynamicResource BackgroundBrush}" Background="{DynamicResource TextBrush}" 
                        Margin="5 0 5 5" BorderThickness="2">
                     <Grid>
