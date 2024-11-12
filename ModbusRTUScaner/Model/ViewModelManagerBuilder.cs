@@ -34,11 +34,12 @@ namespace ModbusRTUScanner.Model
 
             // Привязка обработчиков смены темы оформления
             new AppThemeManager(flagsManager).SetThemeChangedEvent();
+            DeviceManager deviceManager = new DeviceManager();
 
             // Создание менеджера команд для главного окна ViewModel
-            ScannerCommandManager scannerCommandManager = new ScannerCommandManager(portManager, flagsManager);
+            ScannerCommandManager scannerCommandManager = new ScannerCommandManager(portManager, flagsManager, scannerConsole, deviceManager.Devices);
 
-            DeviceManager deviceManager = new DeviceManager();
+            
 
             // Возвращение нового экземпляра ViewModelManager
             return new ViewModelManager(portManager, flagsManager, scannerConsole, scannerCommandManager, deviceManager);

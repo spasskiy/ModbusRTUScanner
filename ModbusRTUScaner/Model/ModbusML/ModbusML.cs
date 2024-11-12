@@ -22,6 +22,7 @@ namespace ModbusRTUScanner.Model.ModbusML
         public abstract bool WriteSingleRegister(RegisterType type, int address, int value);
         public abstract ushort[]? ReadMultipleRegisters(RegisterType type, int startAddress, int count);
         public abstract bool WriteMultipleRegisters(RegisterType type, int startAddress, ushort[] values);
+        public abstract void SetAddress(int address);
 
         public void Dispose()
         {

@@ -50,7 +50,8 @@ namespace ModbusRTUScanner.Model
             }
             else
             {
-                nodeTail.NodeNext = newNode;
+                if(nodeTail is not null)
+                    nodeTail.NodeNext = newNode;
                 nodeTail = newNode;
             }
 

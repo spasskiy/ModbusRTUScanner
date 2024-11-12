@@ -36,6 +36,11 @@ namespace ModbusRTUScanner.Model
             set => SetOptions(nameof(IsScanRun), ref _isScanRun, value);
         }
 
+        public void IsScanRunSet(bool val)
+        {
+            IsScanRun = val;
+        }
+
         public event EventHandler? ThemeChanged;
 
         #region INotifyPropertyChanged

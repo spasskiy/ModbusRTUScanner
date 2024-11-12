@@ -15,15 +15,6 @@ namespace ModbusRTUScanner.Model
         public DeviceManager()
         {
             Devices = new ObservableCollection<ModbusDevice>();
-            Devices.Add(new ModbusDevice(1, "COM1", 9600, 8, StopBits.One, Parity.None));
-            Devices.Add(new ModbusDevice(20, "COM1", 9600, 8, StopBits.One, Parity.None));
-            Devices.Add(new ModbusDevice(20, "COM1", 9600, 8, StopBits.One, Parity.None));
-            Devices.Add(new ModbusDevice(20, "COM1", 9600, 8, StopBits.One, Parity.None));
-            Devices.Add(new ModbusDevice(20, "COM1", 9600, 8, StopBits.One, Parity.None));
-            Devices.Add(new ModbusDevice(20, "COM1", 9600, 8, StopBits.One, Parity.None));
-            Devices.Add(new ModbusDevice(20, "COM1", 9600, 8, StopBits.One, Parity.None));
-            Devices.Add(new ModbusDevice(20, "COM1", 9600, 8, StopBits.One, Parity.None));
-            Devices.Add(new ModbusDevice(20, "COM1", 9600, 8, StopBits.One, Parity.None));
         }
     }
 }

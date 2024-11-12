@@ -1,0 +1,350 @@
+@startuml
+class ModbusRTUScanner.Model.AppThemeManager {
+    - MainWindowViewModelFlags _flagsManager
+    + AppThemeManager(MainWindowViewModelFlags flagsManager)
+    + void SetThemeChangedEvent()
+    - void OnThemeChanged(object? sender, EventArgs e)
+    - void ApplyTheme(string dictionaryName)
+}
+
+class ModbusRTUScanner.Model.ConsoleManager {
+    - string? _consoleOutput
+    + string? ConsoleOutput
+    - ConsoleNode? nodeHead
+    - ConsoleNode? nodeTail
+    - const int MaxNodeCount = 500
+    - int nodeCount
+    + void AddNode(string value)
+    - string GenerateOutputString()
+    - void RemoveFirstNode()
+    + void Clear()
+    # event PropertyChangedEventHandler? PropertyChanged
+    # void OnPropertyChanged(PropertyChangedEventArgs e)
+    # void SetOptions<T>(string property, ref T variable, T value)
+}
+
+class ModbusRTUScanner.Model.ConsoleNode {
+    + ConsoleNode? NodeNext
+    + string NodeValue { get; set; }
+    + ConsoleNode(string value)
+}
+
+class ModbusRTUScanner.Model.DeviceConnectionSettings {
+    + string? PortName { get; set; }
+    + ushort Address { get; set; }
+    + int BaudRate { get; set; }
+    + Parity Parity { get; set; }
+    + int DataBits { get; set; }
+    + StopBits StopBits { get; set; }
+}
+
+class ModbusRTUScanner.Model.DeviceFinder {
+}
+
+class ModbusRTUScanner.Model.MainWindowViewModelFlags {
+    - bool _isNightModeOn
+    + bool IsNightModeOn
+    - bool _isScanRun
+    + bool IsScanRun
+    + event EventHandler? ThemeChanged
+    # event PropertyChangedEventHandler? PropertyChanged
+    # void OnPropertyChanged(PropertyChangedEventArgs e)
+    # void SetOptions<T>(string Property, ref T variable, T value)
+}
+
+class ModbusRTUScanner.Model.RelayCommand<T> {
+    - Action<T> _execute
+    - Func<T, bool> _canExecute
+    + RelayCommand(Action<T> execute, Func<T, bool> canExecute = null)
+    + bool CanExecute(object parameter)
+    + void Execute(object parameter)
+    + event EventHandler CanExecuteChanged
+}
+
+class ModbusRTUScanner.Model.ScannerCommandManager {
+    - CancellationTokenSource _cancellationTokenSource
+    + ICommand SwitchThemeCommand { get; }
+    + ICommand FindDevicesCommand { get; }
+    + ICommand CancelCommand { get; }
+    + ICommand SetDataBitsCommand { get; }
+    + ICommand SetParityCommand { get; }
+    + ICommand SetStopBitsCommand { get; }
+    + ScannerCommandManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager)
+    + CancellationTokenSource GetCancelationTokken()
+    + void CancelCancelationTokken()
+}
+
+class ModbusRTUScanner.Model.ScannerModel {
+    + ObservableCollection<DeviceConnectionSettings> FindedDevices { get; set; }
+    + ScannerModel()
+}
+
+class ModbusRTUScanner.Model.ScannerSettings {
+    + List<long> SerialPortSpeeds { get; set; }
+    + short StartAddress { get; set; }
+    + short EndAddress { get; set; }
+    + ScannerSettings()
+}
+
+class ModbusRTUScanner.Model.SerialPortGetter {
+    + string GetFirstPortName()
+    + string[] GetAllPortsNames()
+}
+
+class ModbusRTUScanner.Model.SerialPortManager {
+    - ConsoleManager _scannerConsole
+    - int _currentAddress
+    + int CurrentAddress
+    - int _modbusStartAddress
+    + int ModbusStartAddress
+    - int _modbusEndAddress
+    + int ModbusEndAddress
+    + ObservableCollection<SerialPort> Ports { get; init; }
+    - SerialPortSettings _portSettings
+    + SerialPortSettings PortSettings
+    + ObservableCollection<SerialPortSpeedNode> SerialPortSpeeds { get; init; }
+    + SerialPortManager(ObservableCollection<SerialPort> ports, SerialPortSettings settings, ConsoleManager scannerConsole)
+    - SerialPort? _selectedPort
+    + SerialPort? SelectedPort
+    + void ApplySettingsToSerialPort(SerialPort serialPort, int baudRate)
+    + void SetDataBits(object param)
+    + void SetParity(object param)
+    + void SetStopBits(object param)
+    # event PropertyChangedEventHandler? PropertyChanged
+    # void OnPropertyChanged(PropertyChangedEventArgs e)
+    # void SetOptions<T>(string property, ref T variable, T value)
+}
+
+class ModbusRTUScanner.Model.SerialPortSettings {
+    - string? _portName
+    + string? PortName
+    - string _baudRate
+    + string BaudRate
+    - int _dataBits
+    + int DataBits
+    - StopBits _stopBits
+    + StopBits StopBits
+    - Parity _parity
+    + Parity Parity
+    - int _writeTimeout
+    + int WriteTimeout
+    - int _readTimeout
+    + int ReadTimeout
+    + SerialPortSettings()
+    + SerialPortSettings(SerialPort? serialPort)
+    + void LoadSettingsFromSerialPort(SerialPort? serialPort)
+    # event PropertyChangedEventHandler? PropertyChanged
+    # void OnPropertyChanged(PropertyChangedEventArgs e)
+    # void SetOptions<T>(string property, ref T variable, T value)
+}
+
+class ModbusRTUScanner.Model.SerialPortSpeedNode {
+    - int? _portSpeed
+    + int? PortSpeed
+    - bool _isSelected
+    + bool IsSelected
+    + SerialPortSpeedNode(int? speed = null)
+    # event PropertyChangedEventHandler? PropertyChanged
+    # void OnPropertyChanged(PropertyChangedEventArgs e)
+    # void SetOptions<T>(string Property, ref T variable, T value)
+}
+
+class ModbusRTUScanner.Model.SerialPortSpeedNodeBuilder {
+    + ObservableCollection<SerialPortSpeedNode> Build()
+}
+
+class ModbusRTUScanner.Model.SerialPortUtils {
+    + SerialPort[] GetAvailableSerialPorts()
+}
+
+class ModbusRTUScanner.Model.ViewModelManager {
+    + ScannerCommandManager CommandManager { get; init; }
+    + SerialPortManager PortManager { get; init; }
+    + MainWindowViewModelFlags FlagsManager { get; init; }
+    + ConsoleManager ScannerConsole { get; init; }
+    + ViewModelManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager, ConsoleManager consoleManager, ScannerCommandManager scannerCommandManager)
+}
+
+class ModbusRTUScanner.Model.ViewModelManagerBuilder {
+    + ViewModelManager Build()
+}
+
+class ModbusRTUScanner.View.Controls.Utility.VisualTreeFinder {
+    + static T? FindChild<T>(DependencyObject depObj) where T : DependencyObject
+}
+
+class ModbusRTUScanner.View.Controls.ConsoleTextBox {
+    - ScrollBar? _scrollBar
+    + static readonly DependencyProperty TextProperty
+    + string? Text
+    + static ConsoleTextBox()
+    + ConsoleTextBox()
+    - void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    - void ScrollBar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    - void ClearButton_Click(object sender, RoutedEventArgs e)
+    - static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    - void UpdateText()
+}
+
+class ModbusRTUScanner.View.Controls.TextBoxPlaceholderControl {
+    + static readonly DependencyProperty TextProperty
+    - string? _text
+    + string? Text
+    - bool _isDigitalOnly
+    + bool IsDigitalOnly
+    + static readonly new DependencyProperty BackgroundProperty
+    + new Brush Background
+    + static readonly new DependencyProperty ForegroundProperty
+    + new Brush Foreground
+    + static readonly DependencyProperty PlaceholderTextProperty
+    + string PlaceholderText
+    + static readonly DependencyProperty PlaceholderColorProperty
+    + Brush PlaceholderColor
+    + static TextBoxPlaceholderControl()
+    + TextBoxPlaceholderControl()
+    - void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+    - static void OnBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    - void UpdateBackground()
+    - static void OnForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    - void UpdateForeground()
+    - static void OnPlaceholderTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    - void UpdatePlaceholderText()
+    - static void OnPlaceholderColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    - void UpdatePlaceholderColor()
+    # event PropertyChangedEventHandler? PropertyChanged
+    # void OnPropertyChanged(PropertyChangedEventArgs e)
+    # void SetOptions<T>(string Property, ref T variable, T value)
+}
+
+class ModbusRTUScanner.View.Converters.BooleanToVisibilityConverter {
+    + object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    + object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+}
+
+class ModbusRTUScanner.View.Converters.BooleanToVisibilityReverseConverter {
+    + object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    + object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+}
+
+class ModbusRTUScanner.View.Converters.ExcludeLastItemConverter {
+    + object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    + object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+}
+
+class ModbusRTUScanner.View.Converters.StringToVisibilityConverter {
+    + object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    + object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+}
+
+class ModbusRTUScanner.View.Style.CustomWindow {
+    + static readonly RoutedCommand MinimizeCommand
+    + static readonly RoutedCommand MaximizeRestoreCommand
+    + static readonly RoutedCommand CloseCommand
+    + static CustomWindow()
+    - static void MinimizeExecuted(object sender, ExecutedRoutedEventArgs e)
+    - static void MaximizeRestoreExecuted(object sender, ExecutedRoutedEventArgs e)
+    - static void CloseExecuted(object sender, ExecutedRoutedEventArgs e)
+}
+
+class ModbusRTUScanner.MainWindow {
+    + MainWindow()
+    - void Exit_Click(object sender, RoutedEventArgs e)
+}
+
+class ModbusRTUScanner.ViewModel.MainWindowViewModel {
+    + ViewModelManager ViewManager { get; init; }
+    + MainWindowViewModel()
+}
+
+'ModbusRTUScanner.Model.AppThemeManager
+ModbusRTUScanner.Model.ViewModelManagerBuilder <-- ModbusRTUScanner.Model.AppThemeManager
+
+'ModbusRTUScanner.Model.ConsoleManager
+ModbusRTUScanner.Model.SerialPortManager o-- ModbusRTUScanner.Model.ConsoleManager
+ModbusRTUScanner.Model.ViewModelManager o-- ModbusRTUScanner.Model.ConsoleManager
+ModbusRTUScanner.Model.ViewModelManagerBuilder <-- ModbusRTUScanner.Model.ConsoleManager
+
+'ModbusRTUScanner.Model.ConsoleNode
+ModbusRTUScanner.Model.ConsoleManager o-- ModbusRTUScanner.Model.ConsoleNode
+
+'ModbusRTUScanner.Model.DeviceConnectionSettings
+ModbusRTUScanner.Model.ScannerModel o-- ModbusRTUScanner.Model.DeviceConnectionSettings
+
+'ModbusRTUScanner.Model.DeviceFinder
+
+'ModbusRTUScanner.Model.MainWindowViewModelFlags
+ModbusRTUScanner.Model.AppThemeManager o-- ModbusRTUScanner.Model.MainWindowViewModelFlags
+ModbusRTUScanner.Model.ScannerCommandManager <-- ModbusRTUScanner.Model.MainWindowViewModelFlags
+ModbusRTUScanner.Model.ViewModelManager o-- ModbusRTUScanner.Model.MainWindowViewModelFlags
+ModbusRTUScanner.Model.ViewModelManagerBuilder <-- ModbusRTUScanner.Model.MainWindowViewModelFlags
+
+'ModbusRTUScanner.Model.RelayCommand
+ModbusRTUScanner.Model.ScannerCommandManager o-- ModbusRTUScanner.Model.RelayCommand
+
+'ModbusRTUScanner.Model.ScannerCommandManager
+ModbusRTUScanner.Model.ViewModelManager o-- ModbusRTUScanner.Model.ScannerCommandManager
+ModbusRTUScanner.Model.ViewModelManagerBuilder <-- ModbusRTUScanner.Model.ScannerCommandManager
+
+'ModbusRTUScanner.Model.ScannerModel
+
+'ModbusRTUScanner.Model.ScannerSettings
+
+'ModbusRTUScanner.Model.SerialPortGetter
+ModbusRTUScanner.Model.SerialPortSettings <-- ModbusRTUScanner.Model.SerialPortGetter
+
+'ModbusRTUScanner.Model.SerialPortManager
+ModbusRTUScanner.Model.ScannerCommandManager <-- ModbusRTUScanner.Model.SerialPortManager
+ModbusRTUScanner.Model.ViewModelManager o-- ModbusRTUScanner.Model.SerialPortManager
+ModbusRTUScanner.Model.ViewModelManagerBuilder <-- ModbusRTUScanner.Model.SerialPortManager
+
+'ModbusRTUScanner.Model.SerialPortSettings
+ModbusRTUScanner.Model.SerialPortManager o-- ModbusRTUScanner.Model.SerialPortSettings
+ModbusRTUScanner.Model.ViewModelManagerBuilder <-- ModbusRTUScanner.Model.SerialPortSettings
+
+'ModbusRTUScanner.Model.SerialPortSpeedNode
+ModbusRTUScanner.Model.SerialPortManager o-- ModbusRTUScanner.Model.SerialPortSpeedNode
+ModbusRTUScanner.Model.SerialPortSpeedNodeBuilder <-- ModbusRTUScanner.Model.SerialPortSpeedNode
+
+'ModbusRTUScanner.Model.SerialPortSpeedNodeBuilder
+ModbusRTUScanner.Model.SerialPortManager <-- ModbusRTUScanner.Model.SerialPortSpeedNodeBuilder
+
+'ModbusRTUScanner.Model.SerialPortUtils
+ModbusRTUScanner.Model.ViewModelManagerBuilder <-- ModbusRTUScanner.Model.SerialPortUtils
+
+'ModbusRTUScanner.Model.ViewModelManager
+ModbusRTUScanner.ViewModel.MainWindowViewModel o-- ModbusRTUScanner.Model.ViewModelManager
+ModbusRTUScanner.Model.ViewModelManagerBuilder <-- ModbusRTUScanner.Model.ViewModelManager
+
+'ModbusRTUScanner.Model.ViewModelManagerBuilder
+ModbusRTUScanner.ViewModel.MainWindowViewModel <-- ModbusRTUScanner.Model.ViewModelManagerBuilder
+
+'ModbusRTUScanner.View.Controls.Utility.VisualTreeFinder
+ModbusRTUScanner.View.Controls.ConsoleTextBox <-- ModbusRTUScanner.View.Controls.Utility.VisualTreeFinder
+
+'ModbusRTUScanner.View.Controls.ConsoleTextBox
+ModbusRTUScanner.MainWindow o-- ModbusRTUScanner.View.Controls.ConsoleTextBox
+
+'ModbusRTUScanner.View.Controls.TextBoxPlaceholderControl
+ModbusRTUScanner.MainWindow o-- ModbusRTUScanner.View.Controls.TextBoxPlaceholderControl
+
+'ModbusRTUScanner.View.Converters.BooleanToVisibilityConverter
+ModbusRTUScanner.MainWindow <-- ModbusRTUScanner.View.Converters.BooleanToVisibilityConverter
+
+'ModbusRTUScanner.View.Converters.BooleanToVisibilityReverseConverter
+ModbusRTUScanner.MainWindow <-- ModbusRTUScanner.View.Converters.BooleanToVisibilityReverseConverter
+
+'ModbusRTUScanner.View.Converters.ExcludeLastItemConverter
+
+'ModbusRTUScanner.View.Converters.StringToVisibilityConverter
+ModbusRTUScanner.View.Controls.TextBoxPlaceholderControl <- ModbusRTUScanner.View.Converters.StringToVisibilityConverter
+
+'ModbusRTUScanner.View.Style.CustomWindow
+ModbusRTUScanner.MainWindow <-- ModbusRTUScanner.View.Style.CustomWindow
+
+'ModbusRTUScanner.MainWindow
+
+'ModbusRTUScanner.ViewModel.MainWindowViewModel
+ModbusRTUScanner.MainWindow <-- ModbusRTUScanner.ViewModel.MainWindowViewModel
+
+
+@enduml

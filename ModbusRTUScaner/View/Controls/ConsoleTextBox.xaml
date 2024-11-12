@@ -11,6 +11,7 @@
                             HorizontalAlignment="Stretch" 
                             VerticalAlignment="Stretch" 
                             TextWrapping="Wrap" 
+                            TextChanged="textBox_TextChanged"
                             VerticalScrollBarVisibility="Auto"                             
                             AcceptsReturn="True" 
                             IsReadOnly="False"                           

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ModbusRTUScanner.Model
 {
-    public class ModbusDevice
+    public class ModbusDevice : IEquatable<ModbusDevice>
     {
         public int Address { get; init; }
         public string PortName { get; init; }
@@ -24,6 +24,29 @@ namespace ModbusRTUScanner.Model
             DataBits = dataBits;
             StopBits = stopBits;
             Parity = parity;
+        }
+
+        public bool Equals(ModbusDevice other)
+        {
+            if (other == null)
+                return false;
+
+            return Address == other.Address &&
+                   PortName == other.PortName &&
+                   Speed == other.Speed &&
+                   DataBits == other.DataBits &&
+                   StopBits == other.StopBits &&
+                   Parity == other.Parity;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ModbusDevice);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Address, PortName, Speed, DataBits, StopBits, Parity);
         }
     }
 }

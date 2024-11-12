@@ -87,8 +87,8 @@
                         </Expander>
                     </StackPanel>
                 </GroupBox>
-                <Button Grid.Row="2" Margin="5 10 0 10" Content="ПОИСК" Command="{Binding ViewManager.CommandManager.FindDevicesCommand}" Visibility="{Binding ViewManager.FlagsManager.IsScanRun, Converter={StaticResource BooleanToVisibilityReverseConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Grid.Row="2" Margin="5 10 0 10" Content="ОТМЕНА" Command="{Binding ViewManager.CommandManager.CancelCommand}" Visibility="{Binding ViewManager.FlagsManager.IsScanRun, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <Button Grid.Row="2" MaxHeight="150" Margin="5 10 0 10" Content="ПОИСК" Command="{Binding ViewManager.CommandManager.FindDevicesCommand}" Visibility="{Binding ViewManager.FlagsManager.IsScanRun, Converter={StaticResource BooleanToVisibilityReverseConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Row="2" MaxHeight="150" Margin="5 10 0 10" Content="ОТМЕНА" Command="{Binding ViewManager.CommandManager.CancelCommand}" Visibility="{Binding ViewManager.FlagsManager.IsScanRun, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 <Button Grid.Row="3" Style="{StaticResource NightButtonStyle}"  
              Width="101"
              Command="{Binding ViewManager.CommandManager.SwitchThemeCommand}"
@@ -154,9 +154,11 @@
                     <CheckBox Grid.Row="15" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="{Binding ViewManager.PortManager.SerialPortSpeeds[15].PortSpeed}" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[15].IsSelected}"/>
                     <CheckBox Grid.Row="16" Grid.Column="0" Style="{StaticResource FancyCheckBox}" Content="Своя :" IsChecked="{Binding ViewManager.PortManager.SerialPortSpeeds[16].IsSelected}"/>
                     <controls:TextBoxPlaceholderControl 
+                        Background="{DynamicResource InputTextBackgroundBrush}"
+                        Foreground="{DynamicResource TextBrush}"
                         Grid.Row="17" 
                         Grid.Column="0"
-                        Text="{Binding ViewManager.PortManager.SerialPortSpeeds[16].PortSpeed}"
+                        Text="{Binding ViewManager.PortManager.SerialPortSpeeds[16].PortSpeed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         x:Name="CustomBaudRateControl"                        
                         PlaceholderText ="Задайте вашу скорость"
                         IsDigitalOnly="True"
@@ -191,7 +193,13 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBox Grid.Column="0" Width="50" Padding="3" Text="{Binding ElementName=MyRangeSlider, Path=LowerValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:N0}'}" />
-                        <MahApps:RangeSlider x:Name="MyRangeSlider" Grid.Column="1" Minimum="{Binding ViewManager.PortManager.ModbusStartAddress}" Maximum="{Binding ViewManager.PortManager.ModbusEndAddress}" ExtendedMode="True" LowerValue="0" UpperValue="255" SmallChange="1"
+                        <MahApps:RangeSlider x:Name="MyRangeSlider" Grid.Column="1" 
+                                             Minimum="0" 
+                                             Maximum="255" 
+                                             ExtendedMode="True" 
+                                             LowerValue="{Binding ViewManager.PortManager.ModbusStartAddress, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                             UpperValue="{Binding ViewManager.PortManager.ModbusEndAddress, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                             SmallChange="1"
                                              Margin="0 5" MahApps:SliderHelper.ThumbFillBrush="{DynamicResource CheckboxIsMouseOverBorderBrush}" MahApps:SliderHelper.ThumbFillHoverBrush="{DynamicResource CheckBoxIsCheckedBorderBrush}"
                                              MahApps:SliderHelper.ThumbFillPressedBrush="{DynamicResource ButtonUderMouse}"                                             
                                              >
@@ -199,12 +207,11 @@
                         </MahApps:RangeSlider>
                         <TextBox Grid.Column="2" Width="50" Padding="3" Text="{Binding ElementName=MyRangeSlider, Path=UpperValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:N0}'}" />
                     </Grid>
-
-                </GroupBox>
+                </GroupBox>                
             </StackPanel>
             <GroupBox Grid.Row="0" Grid.Column="3" Style="{StaticResource GroupBoxBaseStyle}" Header="Результаты сканирования" Margin="5 0">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <TreeView ItemsSource="{Binding ViewManager.Devices.Devices}">
+                    <TreeView ItemsSource="{Binding ViewManager.Devices.Devices}" Background="{DynamicResource MainBackgroundBrush}" BorderBrush="Red" BorderThickness="0">
                         <TreeView.Resources>
                             <ResourceDictionary Source="Styles/ModbusDeviceTreeViewTemplate.xaml"/>
                         </TreeView.Resources>
@@ -225,13 +232,11 @@
                 <Border Grid.Row="1" BorderBrush="{DynamicResource BackgroundBrush}" Background="{DynamicResource TextBrush}" 
                        Margin="5 0 5 5" BorderThickness="2">
                     <Grid>
-                        <!---Какие-то заморочки с объектом в привязке-->
-                        <controls:ConsoleTextBox Text="{Binding ViewManager.ScannerConsole.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <!--<controls:ConsoleTextBox Text="{Binding ElementName=ThisWindow, Path=DataContext.ViewManager.Console.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
+                        <controls:ConsoleTextBox Text="{Binding ViewManager.ScannerConsole.ConsoleOutput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>                      
                     </Grid>
                 </Border>
             </Grid>
-            <Button Grid.Column="3" Grid.Row="1" Content="ВЫХОД" Margin="0 0 -1 -1" Click="Exit_Click"/>
+            <Button Grid.Column="3" Grid.Row="1" Content="ВЫХОД" Margin="0 0 -1 -1" Command="{Binding ViewManager.CommandManager.CloseAppCommand}"/>
         </Grid>
     </Grid>
 </Window>

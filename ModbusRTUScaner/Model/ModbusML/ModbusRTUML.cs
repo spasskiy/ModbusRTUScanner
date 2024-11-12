@@ -17,6 +17,11 @@ namespace ModbusRTUScanner.Model.ModbusML
         {
         }
 
+        public override void SetAddress(int address)
+        {
+            _deviceAddress = address;
+        }
+
 
         public override ushort? ReadSingleRegister(RegisterType type, int registerAddress)
         {

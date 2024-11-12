@@ -11,8 +11,8 @@
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid x:Name="MainGrid">
-        <TextBox x:Name="myTextBox"
-                 Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+        <TextBox x:Name="textBox"
+                 Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                  Background="{Binding Background, RelativeSource={RelativeSource AncestorType=UserControl}}"
                  Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=UserControl}}" />
         <TextBlock Text="{Binding PlaceholderText, RelativeSource={RelativeSource AncestorType=UserControl}}"

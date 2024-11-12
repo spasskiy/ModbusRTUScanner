@@ -30,12 +30,26 @@ namespace ModbusRTUScanner.View.Controls
         static TextBoxPlaceholderControl()
         {
             TextProperty = DependencyProperty.Register(
-                nameof(Text),
-                typeof(string),
-                typeof(TextBoxPlaceholderControl),
-                new FrameworkPropertyMetadata(
-                        string.Empty,
-                        FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));                
+                                nameof(Text),
+                                typeof(string),
+                                typeof(TextBoxPlaceholderControl),
+                                new FrameworkPropertyMetadata(
+                                        string.Empty,
+                                        FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                                        new PropertyChangedCallback(OnTextChanged)));
+        }
+
+        private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TextBoxPlaceholderControl control)
+            {
+                control.UpdateText();
+            }
+        }
+
+        private void UpdateText()
+        {
+            textBox.Text = Text;
         }
 
 
@@ -249,7 +263,6 @@ namespace ModbusRTUScanner.View.Controls
         public TextBoxPlaceholderControl()
         {
             InitializeComponent();
-            DataContext = this;
         }
 
         /// <summary>
@@ -259,7 +272,7 @@ namespace ModbusRTUScanner.View.Controls
         /// <param name="e">Аргументы события</param>
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            myTextBox.Focus();
+            textBox.Focus();
             e.Handled = true; // Отмечаем событие как обработанное, чтобы оно не всплывало дальше
         }
 

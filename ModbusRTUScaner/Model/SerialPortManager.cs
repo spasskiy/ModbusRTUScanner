@@ -30,7 +30,11 @@ namespace ModbusRTUScanner.Model
         public int ModbusStartAddress
         {
             get => _modbusStartAddress;
-            set => SetOptions(nameof(ModbusStartAddress), ref _modbusStartAddress, value);
+            set
+            {
+                SetOptions(nameof(ModbusStartAddress), ref _modbusStartAddress, value);
+                CurrentAddress = ModbusStartAddress;
+            }                
         }
         private int _modbusEndAddress;
         /// <summary>
@@ -45,10 +49,10 @@ namespace ModbusRTUScanner.Model
         /// <summary>
         /// Коллекция доступных последовательных портов
         /// </summary>
-        public ObservableCollection<SerialPort> Ports 
-        { 
-            get; 
-            init; 
+        public ObservableCollection<SerialPort> Ports
+        {
+            get;
+            init;
         }
 
         /// <summary>
@@ -89,25 +93,38 @@ namespace ModbusRTUScanner.Model
             set => SetOptions(nameof(SelectedPort), ref _selectedPort, value);
         }
 
-
+        /// <summary>
+        /// Возвращает текущий выбранный порт
+        /// </summary>
+        /// <returns></returns>
+        public SerialPort? GetCurrentPort()
+        {
+            ApplySettingsToSerialPort();
+            return _selectedPort;
+        }
 
         /// <summary>
         /// Применяет текущие настройки к указанному объекту SerialPort
         /// </summary>
         /// <param name="serialPort">Объект SerialPort, к которому применяются настройки</param>
-        public void ApplySettingsToSerialPort(SerialPort serialPort, int baudRate)
+        private void ApplySettingsToSerialPort()
         {
-            if (serialPort.PortName == _portSettings.PortName)
+            if (_selectedPort is not null)
             {
-                serialPort.BaudRate = baudRate;
-                serialPort.DataBits = _portSettings.DataBits;
-                serialPort.StopBits = _portSettings.StopBits;
-                serialPort.Parity = _portSettings.Parity;
-                serialPort.WriteTimeout = _portSettings.WriteTimeout;
-                serialPort.ReadTimeout = _portSettings.ReadTimeout;
+                var selectedSpeed = SerialPortSpeeds.FirstOrDefault(x => x.IsSelected);
+                _selectedPort.BaudRate = selectedSpeed?.PortSpeed ?? 9600;
+                _selectedPort.DataBits = _portSettings.DataBits;
+                _selectedPort.StopBits = _portSettings.StopBits;
+                _selectedPort.Parity = _portSettings.Parity;
+                _selectedPort.WriteTimeout = _portSettings.WriteTimeout;
+                _selectedPort.ReadTimeout = _portSettings.ReadTimeout;
             }
         }
 
+        /// <summary>
+        /// Устанавливает значение DataBits
+        /// </summary>
+        /// <param name="param"></param>
         public void SetDataBits(object param)
         {
             if (param is string str && str != PortSettings.DataBits.ToString())
@@ -118,6 +135,10 @@ namespace ModbusRTUScanner.Model
             }
         }
 
+        /// <summary>
+        /// Устанавливает значение Parity
+        /// </summary>
+        /// <param name="param"></param>
         public void SetParity(object param)
         {
             if (param is string str)
@@ -125,7 +146,7 @@ namespace ModbusRTUScanner.Model
                 switch (str)
                 {
                     case "None":
-                        if(PortSettings.Parity != Parity.None)
+                        if (PortSettings.Parity != Parity.None)
                         {
                             _scannerConsole.AddNode("Parity переключено на None");
                             PortSettings.Parity = Parity.None;
@@ -152,6 +173,10 @@ namespace ModbusRTUScanner.Model
             }
         }
 
+        /// <summary>
+        /// Устанавливает значение StopBits
+        /// </summary>
+        /// <param name="param"></param>
         public void SetStopBits(object param)
         {
             if (param is string str)
@@ -159,7 +184,7 @@ namespace ModbusRTUScanner.Model
                 switch (str)
                 {
                     case "1":
-                        if(PortSettings.StopBits != StopBits.One)
+                        if (PortSettings.StopBits != StopBits.One)
                         {
                             _scannerConsole.AddNode("StopBits переключено на One");
                             PortSettings.StopBits = StopBits.One;
@@ -179,6 +204,10 @@ namespace ModbusRTUScanner.Model
             }
         }
 
+        /// <summary>
+        /// Обновляет список портов
+        /// </summary>
+        /// <param name="param"></param>
         public void UpdatePorts(object param)
         {
             Ports.Clear();

@@ -22,10 +22,7 @@ namespace ModbusRTUScanner.View.Controls
         public string? Text
         {
             get => (string)GetValue(TextProperty);
-            set
-            {
-                SetValue(TextProperty, value);                
-            }
+            set => SetValue(TextProperty, value);                
         }
         static ConsoleTextBox()
         {
@@ -102,6 +99,12 @@ namespace ModbusRTUScanner.View.Controls
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             Text = string.Empty;
+        }
+
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            textBox.Focus();
+            textBox.Select(textBox.Text.Length, 0);
         }
     }
 }
