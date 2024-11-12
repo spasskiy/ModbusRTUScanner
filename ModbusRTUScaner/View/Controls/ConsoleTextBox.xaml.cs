@@ -98,6 +98,7 @@ namespace ModbusRTUScanner.View.Controls
         /// <param name="e">Аргументы события</param>
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
+            textBox.Clear();
             Text = string.Empty;
         }
 
