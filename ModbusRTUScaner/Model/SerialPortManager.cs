@@ -90,7 +90,13 @@ namespace ModbusRTUScanner.Model
         public SerialPort? SelectedPort
         {
             get => _selectedPort;
-            set => SetOptions(nameof(SelectedPort), ref _selectedPort, value);
+            set
+            {
+                if (value is not null)
+                {
+                    SetOptions(nameof(SelectedPort), ref _selectedPort, value);
+                }                
+            }
         }
 
         /// <summary>

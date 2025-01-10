@@ -16,7 +16,7 @@ namespace ModbusRTUScanner.Model
             SerialPort? port = portManager.GetCurrentPort();
             var speeds = ExtractSelectedSpeeds(portManager);
             if (port == null)
-            {
+            {                
                 throw new Exception("No port selected");
             }
             return new DeviceFinder(portManager, swichIsScanRun, addStringToConsole, devices);

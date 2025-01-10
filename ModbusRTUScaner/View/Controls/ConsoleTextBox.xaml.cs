@@ -105,7 +105,7 @@ namespace ModbusRTUScanner.View.Controls
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             textBox.Focus();
-            textBox.Select(textBox.Text.Length, 0);
+            textBox.Select(textBox.Text.Length, 0);            
         }
     }
 }
