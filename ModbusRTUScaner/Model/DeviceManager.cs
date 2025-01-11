@@ -12,9 +12,13 @@ namespace ModbusRTUScanner.Model
     {
         public ObservableCollection<ModbusDevice> Devices { get; init; }
 
+        
+        public ModbusDevice SelectedDevice { get; set; }
         public DeviceManager()
         {
             Devices = new ObservableCollection<ModbusDevice>();
         }
+
+        
     }
 }

@@ -1,0 +1,27 @@
+﻿<Window x:Class="ModbusRTUScanner.View.RequestsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ModbusRTUScanner.View"
+        mc:Ignorable="d"
+        Title="RequestsWindow" Height="450" Width="600">
+    <Grid>
+        <!-- Определяем две колонки -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Левая часть -->
+        <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="{Binding TestString}" />
+            <Button Content="Показать правую часть" Click="ToggleRightPanel"/>
+        </StackPanel>
+
+        <!-- Правая часть -->
+        <Grid Grid.Column="1" x:Name="RightPanel" Width="200" Visibility="Collapsed">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Правая часть"/>
+        </Grid>
+    </Grid>
+</Window>

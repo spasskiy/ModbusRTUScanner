@@ -37,7 +37,7 @@ namespace ModbusRTUScanner.Model
             DeviceManager deviceManager = new DeviceManager();
 
             // Создание менеджера команд для главного окна ViewModel
-            ScannerCommandManager scannerCommandManager = new ScannerCommandManager(portManager, flagsManager, scannerConsole, deviceManager.Devices);
+            ScannerCommandManager scannerCommandManager = new ScannerCommandManager(portManager, flagsManager, scannerConsole, deviceManager);
 
             
 

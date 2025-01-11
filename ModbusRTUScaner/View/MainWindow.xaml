@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ModbusRTUScanner"
         xmlns:converters="clr-namespace:ModbusRTUScanner.View.Converters"
         xmlns:controls="clr-namespace:ModbusRTUScanner.View.Controls"
+        xmlns:e="clr-namespace:ModbusRTUScanner.ViewModel.Behaviors"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:MahApps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Style="{StaticResource CustomWindowStyle}"
@@ -19,6 +20,7 @@
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:BooleanToVisibilityReverseConverter x:Key="BooleanToVisibilityReverseConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Window.Resources>
     <Grid Grid.Row="1">
         <Grid.RowDefinitions>
@@ -210,16 +212,38 @@
                 </GroupBox>                
             </StackPanel>
             <GroupBox Grid.Row="0" Grid.Column="3" Style="{StaticResource GroupBoxBaseStyle}" Header="Результаты сканирования" Margin="5 0">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <TreeView ItemsSource="{Binding ViewManager.Devices.Devices}" Background="{DynamicResource MainBackgroundBrush}" BorderBrush="Red" BorderThickness="0">
-                        <TreeView.Resources>
-                            <ResourceDictionary Source="Styles/ModbusDeviceTreeViewTemplate.xaml"/>
-                        </TreeView.Resources>
-                        <TreeView.ItemTemplate>
-                            <DynamicResource ResourceKey="ModbusDeviceTemplate"/>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-                </ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <TreeView ItemsSource="{Binding ViewManager.Devices.Devices}"                                  
+                                  Background="{DynamicResource MainBackgroundBrush}" 
+                                  BorderBrush="Red" 
+                                  BorderThickness="0">
+                                    <i:Interaction.Behaviors>
+                                        <e:BindableSelectedItemBehavior SelectedItem="{Binding ViewManager.Devices.SelectedDevice, Mode=TwoWay}" />
+                                    </i:Interaction.Behaviors>                            
+                            <TreeView.Resources>
+                                <ResourceDictionary Source="Styles/ModbusDeviceTreeViewTemplate.xaml"/>
+                            </TreeView.Resources>
+                            <TreeView.ItemTemplate>
+                                <DynamicResource ResourceKey="ModbusDeviceTemplate"/>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </ScrollViewer>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Margin="0 0 1 0"  Visibility="{Binding ViewManager.Devices.SelectedDevice, 
+                     Converter={StaticResource NullToVisibilityConverter}}" Command="{Binding ViewManager.CommandManager.RequestCommand}">Запрос</Button>
+                        <Button Grid.Column="1" Margin="1 0 0 0" Visibility="{Binding ViewManager.Devices.SelectedDevice, 
+                     Converter={StaticResource NullToVisibilityConverter}}" Command="{Binding ViewManager.CommandManager.DeleteDevicesCommand}">Удалить</Button>
+                    </Grid>                    
+                </Grid>                          
             </GroupBox>
             <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
                 <Grid.RowDefinitions>

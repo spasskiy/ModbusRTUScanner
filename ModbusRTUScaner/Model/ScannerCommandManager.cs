@@ -1,10 +1,12 @@
-﻿using System;
+﻿using ModbusRTUScanner.View;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ModbusRTUScanner.Model
@@ -14,21 +16,25 @@ namespace ModbusRTUScanner.Model
         /// <summary>
         /// Токен отмены
         /// </summary>
-        private CancellationTokenSource? _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource = null!;
         public ICommand SwitchThemeCommand { get; }
         public ICommand FindDevicesCommand { get; }
+        public ICommand DeleteDevicesCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand SetDataBitsCommand { get; }
         public ICommand SetParityCommand { get; }
         public ICommand SetStopBitsCommand { get; }
         public ICommand UpdatePortsCommand { get; }
+        public ICommand RequestCommand { get; }
         public ICommand CloseAppCommand { get; }
         public ICommand TestCommand { get; }
 
-        public ScannerCommandManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager, ConsoleManager console, ObservableCollection<ModbusDevice> devices)
+        public ScannerCommandManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager, ConsoleManager console, DeviceManager deviceManager)
         {
             SwitchThemeCommand = new RelayCommand<object>((_) => flagsManager.IsNightModeOn = !flagsManager.IsNightModeOn);
-            FindDevicesCommand = new RelayCommand<object>(async (_) => await Task.Run(() => new DeviceFinderBuilder().Build(portManager, flagsManager.IsScanRunSet, console.AddNode, devices).FindDevices(GetCancelationTokken())));
+            FindDevicesCommand = new RelayCommand<object>(async (_) => await Task.Run(() => new DeviceFinderBuilder().Build(portManager, flagsManager.IsScanRunSet, console.AddNode, deviceManager.Devices).FindDevices(GetCancelationTokken())));
+            DeleteDevicesCommand = new RelayCommand<object>((_) => deviceManager.Devices.Remove(deviceManager.SelectedDevice));
+            RequestCommand = new RelayCommand<object>((_) => new RequestsWindow(deviceManager.SelectedDevice).Show());
             CancelCommand = new RelayCommand<object>((_) => _cancellationTokenSource.Cancel());
             SetDataBitsCommand = new RelayCommand<object>(portManager.SetDataBits);
             SetParityCommand = new RelayCommand<object>(portManager.SetParity);
