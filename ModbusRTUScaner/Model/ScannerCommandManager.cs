@@ -34,7 +34,7 @@ namespace ModbusRTUScanner.Model
             SwitchThemeCommand = new RelayCommand<object>((_) => flagsManager.IsNightModeOn = !flagsManager.IsNightModeOn);
             FindDevicesCommand = new RelayCommand<object>(async (_) => await Task.Run(() => new DeviceFinderBuilder().Build(portManager, flagsManager.IsScanRunSet, console.AddNode, deviceManager.Devices).FindDevices(GetCancelationTokken())));
             DeleteDevicesCommand = new RelayCommand<object>((_) => deviceManager.Devices.Remove(deviceManager.SelectedDevice));
-            RequestCommand = new RelayCommand<object>((_) => new RequestsWindow(deviceManager.SelectedDevice).Show());
+            RequestCommand = new RelayCommand<object>((_) => new RequestsWindow(deviceManager.SelectedDevice).ShowDialog());
             CancelCommand = new RelayCommand<object>((_) => _cancellationTokenSource.Cancel());
             SetDataBitsCommand = new RelayCommand<object>(portManager.SetDataBits);
             SetParityCommand = new RelayCommand<object>(portManager.SetParity);

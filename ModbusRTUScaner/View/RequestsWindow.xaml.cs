@@ -1,4 +1,5 @@
 ﻿using ModbusRTUScanner.Model;
+using ModbusRTUScanner.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,20 +21,19 @@ namespace ModbusRTUScanner.View
     /// </summary>
     public partial class RequestsWindow : Window
     {
-        private ModbusDevice _device;
-        public string TestString {  get; set; }
+
+
         public RequestsWindow(ModbusDevice device)
         {
+            Owner = Application.Current.MainWindow;
+            DataContext = new RequestsWindowViewModel(device);
             InitializeComponent();
-            DataContext = this;
-            _device = device;
-            TestString = $"RequestWindow {_device.Address}";
         }
 
-        private void ToggleRightPanel(object sender, RoutedEventArgs e)
-        {
-            // Переключаем видимость правой панели
-            RightPanel.Visibility = RightPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-        }
+        //private void ToggleRightPanel(object sender, RoutedEventArgs e)
+        //{
+        //    // Переключаем видимость правой панели
+        //    RightPanel.Visibility = RightPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        //}
     }
 }

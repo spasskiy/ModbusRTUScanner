@@ -4,24 +4,255 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModbusRTUScanner.View"
+        xmlns:conv="clr-namespace:ModbusRTUScanner.View.Converters"
         mc:Ignorable="d"
-        Title="RequestsWindow" Height="450" Width="600">
-    <Grid>
-        <!-- Определяем две колонки -->
+        WindowStartupLocation="CenterOwner"
+        Title="RequestsWindow" Height="650" Width="1000">
+
+    <Window.Resources>
+        <conv:ParityToStringConverter x:Key="ParityToStringConverter"/>
+        <conv:StopBitsToStringConverter x:Key="StopBitsToStringConverter"/>
+    </Window.Resources>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="0"/>
+    </WindowChrome.WindowChrome>
+
+    <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <GroupBox  Style="{StaticResource GroupBoxBaseStyle}" Header="Ввод запроса">
+            <StackPanel Margin="0 5 0 0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Порт:" Style="{DynamicResource TextBlockBase}" FontWeight="Bold" Margin="0 0 5 0"/>
+                    <ComboBox Grid.Column="1"  ItemsSource="{Binding PortManager.AvailablePorts}" SelectedItem="{Binding PortManager.SerialPort.PortName, Mode=TwoWay}" HorizontalContentAlignment="Right">
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>
+                </Grid>
 
-        <!-- Левая часть -->
-        <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="{Binding TestString}" />
-            <Button Content="Показать правую часть" Click="ToggleRightPanel"/>
-        </StackPanel>
+                <Expander Style="{x:Null}">
+                    <Expander.Header>
+                        <TextBlock Text="Настройки порта :" TextAlignment="Left" HorizontalAlignment="Left" FontStyle="Italic" Style="{DynamicResource TextBlockBase}"/>
+                    </Expander.Header>
+                    <Border BorderThickness="1" Padding="5" CornerRadius="5" Margin="0 5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="3*"/>
+                            </Grid.RowDefinitions>
 
-        <!-- Правая часть -->
-        <Grid Grid.Column="1" x:Name="RightPanel" Width="200" Visibility="Collapsed">
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Правая часть"/>
+                            <TextBlock Style="{DynamicResource TextBlockMenuLeft}">Скорость порта (бод):</TextBlock>
+                            <TextBox Grid.Column="1" Text="{Binding PortManager.SerialPort.BaudRate}"/>
+
+                            <!-- Чётность -->
+                            <TextBlock Grid.Row="1" Style="{DynamicResource TextBlockMenuLeft}">Чётность:</TextBlock>
+                            <ComboBox Grid.Column="1" Grid.Row="1"
+          ItemsSource="{Binding PortManager.SerialPortFieldsCollections.Parities}"
+          SelectedItem="{Binding PortManager.SerialPort.Parity, Mode=TwoWay}"
+          HorizontalContentAlignment="Right">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style TargetType="ComboBoxItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ., Converter={StaticResource ParityToStringConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <!-- Стоп-биты -->
+                            <TextBlock Grid.Row="2" Style="{DynamicResource TextBlockMenuLeft}">Стоп-биты:</TextBlock>
+                            <ComboBox Grid.Column="1" Grid.Row="2"
+          ItemsSource="{Binding PortManager.SerialPortFieldsCollections.StopBits}"
+          SelectedItem="{Binding PortManager.SerialPort.StopBits, Mode=TwoWay}"
+          HorizontalContentAlignment="Right">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style TargetType="ComboBoxItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ., Converter={StaticResource StopBitsToStringConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <!-- Длина слова -->
+                            <TextBlock Grid.Row="3" Style="{DynamicResource TextBlockMenuLeft}">Длина слова:</TextBlock>
+                            <ComboBox Grid.Column="1" Grid.Row="3"
+          ItemsSource="{Binding PortManager.SerialPortFieldsCollections.DataBits}"
+          SelectedItem="{Binding PortManager.SerialPort.DataBits, Mode=TwoWay}"
+          HorizontalContentAlignment="Right">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style TargetType="ComboBoxItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+                            </ComboBox>
+
+                            <Grid Grid.ColumnSpan="2" Grid.Row="4">
+                                <Expander Style="{x:Null}">
+                                    <Expander.Header>
+                                        <TextBlock Text="Дополнительные параметры: " TextAlignment="Left" HorizontalAlignment="Left" FontStyle="Italic" Style="{DynamicResource TextBlockBase}"/>
+                                    </Expander.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Style="{DynamicResource TextBlockMenuLeft}">Таймаут чтения (мс):</TextBlock>
+                                        <TextBox Grid.Column="1"  Text="{Binding PortManager.SerialPort.ReadTimeout}"/>
+                                        <TextBlock Grid.Row="1" Style="{DynamicResource TextBlockMenuLeft}">Таймаут записи (мс):</TextBlock>
+                                        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding PortManager.SerialPort.WriteTimeout}"/>
+                                    </Grid>
+                                </Expander>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Expander>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Адрес (Hex)" Grid.Column="0" HorizontalAlignment="Center" FontSize="12" Style="{DynamicResource TextBlockBase}"/>
+                    <TextBlock Text="PDU (сообщение)" Grid.Column="1" HorizontalAlignment="Center" FontSize="12" Style="{DynamicResource TextBlockBase}"/>
+                    <TextBlock Text="CRC" Grid.Column="2" HorizontalAlignment="Center" FontSize="12" Style="{DynamicResource TextBlockBase}"/>
+
+                    <TextBox Grid.Row="1" Grid.Column="0" x:Name="AddressTextBox" Text="{Binding PortManager.Device.Address}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" IsHitTestVisible="False" Text="HEX" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="DarkGray">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=AddressTextBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="PDUTextBox"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" IsHitTestVisible="False" Text="HEX" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="DarkGray">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=PDUTextBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="2" x:Name="CRCTextBox"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" IsHitTestVisible="False" Text="HEX" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="DarkGray">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=CRCTextBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <Button Content="Запросить" Grid.Row="2" Grid.Column="1" Margin="2" Height="20"/>
+                    <Button Content="Расчёт" Grid.Row="2" Grid.Column="2" Margin="2" Height="20"/>               
+                    <TextBox Grid.Row="3" Grid.ColumnSpan="3" IsReadOnly="True"  Margin="10" TextAlignment="Justify" TextWrapping="Wrap">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding OperationStatus}" Value="Failure">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard AutoReverse="True" RepeatBehavior="1x">
+                                                    <ColorAnimation Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)" To="Red" Duration="0"/>
+                                                    <ColorAnimation Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)" To="Transparent" Duration="0:0:1" BeginTime="0:0:0.1"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding OperationStatus}" Value="Success">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)" To="Green" Duration="0"/>
+                                                    <ColorAnimation Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)" To="Transparent" Duration="0:0:1" BeginTime="0:0:0.1"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </Grid>
+
+                <Grid>
+                    <Button Content="Закрыть" IsCancel="True"/>
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+
+        <Grid Grid.Column="1" x:Name="LogViewControl">
+            <GroupBox  Style="{StaticResource GroupBoxBaseStyle}"  Header="Лог">
+                <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="1" Padding="3">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Время запроса : "/>
+                                        <TextBlock Text="{Binding Timestamp, StringFormat={}{0:dd MMMM yyyy HH:mm:ss.fff}}" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Тип запроса : "/>
+                                        <TextBlock Text="{Binding MessageType}" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <TextBox Text="{Binding MessageContent}" TextWrapping="Wrap" IsReadOnly="True"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox>
         </Grid>
     </Grid>
 </Window>
