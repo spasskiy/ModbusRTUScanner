@@ -1,7 +1,9 @@
 ﻿using ModbusRTUScanner.Model.ModbusML;
+using ModbusRTUScanner.View.Converters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ModbusRTUScanner.Model.RequestsWindowModel
 {
-    public class RequestPortManager
+    public class RequestPortManager : INotifyPropertyChanged
     {
         // Коллекция для хранения имен COM-портов
         public ObservableCollection<string> AvailablePorts { get; set; }
@@ -20,6 +22,64 @@ namespace ModbusRTUScanner.Model.RequestsWindowModel
 
         //Переданное устройство
         public ModbusDevice Device { get; set; }
+
+
+        private byte[]? _crc;
+        public byte[]? CRC
+        {
+            get => _crc;
+            set => SetOptions(nameof(CRC), ref _crc, value);
+        }
+
+        private string? _crcView;
+        public string? CRCView
+        {
+            get => _crcView;
+            set
+            {
+                if (value is not null)
+                {
+                    string trimmedValue = value.TrimStart().TrimStart(':').Replace("::", ":").Replace("  ", " ");
+                    SetOptions(nameof(CRCView), ref _crcView, trimmedValue);
+
+                    int? convertedValue = new HexConverter().ConvertHexToInt(trimmedValue);
+                    if (convertedValue.HasValue)
+                    {
+                        CRC = BitConverter.GetBytes(convertedValue.Value);
+                    }
+                }
+                else
+                    SetOptions(nameof(CRCView), ref _crcView, value);
+
+            }
+        }
+
+        private byte[]? _pdu;
+        public byte[]? PDU
+        {
+            get => _pdu;
+            set => SetOptions(nameof(PDU), ref _pdu, value);
+        }
+
+        private string? _pduView;
+        public string? PDUView
+        {
+            get => _pduView;
+            set
+            {
+                if (value is not null)
+                {
+                    string trimmedValue = value.TrimStart().TrimStart(':').Replace("::", ":").Replace("  ", " ");
+                    SetOptions(nameof(PDUView), ref _pduView, trimmedValue);
+                }
+                else
+                    SetOptions(nameof(PDUView), ref _pduView, value);
+            }
+        }
+
+
+
+
 
         public RequestPortManager(ModbusDevice device) 
         {
@@ -44,5 +104,22 @@ namespace ModbusRTUScanner.Model.RequestsWindowModel
                 AvailablePorts.Add(port);
             }
         }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(this, e);
+        }
+
+        protected void SetOptions<T>(string Property, ref T variable, T value)
+        {
+            variable = value;
+            OnPropertyChanged(new PropertyChangedEventArgs(Property));
+        }
+
+        #endregion
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,10 +31,32 @@ namespace ModbusRTUScanner.View
             InitializeComponent();
         }
 
-        //private void ToggleRightPanel(object sender, RoutedEventArgs e)
-        //{
-        //    // Переключаем видимость правой панели
-        //    RightPanel.Visibility = RightPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-        //}
+        private void TextBox_PreviewHexInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
+
+        private void TextBox_PreviewDigitInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowedDec(e.Text);
+        }
+
+        private bool IsTextAllowed(string text)
+        {
+            {
+                // Регулярное выражение для проверки HEX-значений
+                Regex regex = new Regex(@"^[0-9a-fA-F:]*$");
+                return regex.IsMatch(text);
+            }
+        }
+
+        private bool IsTextAllowedDec(string text)
+        {
+            {
+                // Регулярное выражение для проверки HEX-значений
+                Regex regex = new Regex(@"^\d*$");
+                return regex.IsMatch(text);
+            }
+        }
     }
 }

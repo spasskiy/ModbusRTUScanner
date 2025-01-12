@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -7,9 +8,14 @@ using System.Threading.Tasks;
 
 namespace ModbusRTUScanner.Model
 {
-    public class ModbusDevice : IEquatable<ModbusDevice>, ICloneable
+    public class ModbusDevice : IEquatable<ModbusDevice>, ICloneable, INotifyPropertyChanged
     {
-        public int Address { get; init; }
+        private int _address;
+        public int Address 
+        { 
+            get => _address; 
+            set => SetOptions(nameof(Address), ref _address, value);
+        }
         public string PortName { get; init; }
         public int Speed { get; init; }
         public int DataBits { get; init; }
@@ -60,5 +66,19 @@ namespace ModbusRTUScanner.Model
                 Parity      // Копируем значение Parity
             );
         }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(this, e);
+        }
+        protected void SetOptions<T>(string Property, ref T variable, T value)
+        {
+            variable = value;
+            OnPropertyChanged(new PropertyChangedEventArgs(Property));
+        }
+
+        #endregion
     }
 }

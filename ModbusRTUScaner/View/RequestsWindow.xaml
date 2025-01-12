@@ -12,6 +12,7 @@
     <Window.Resources>
         <conv:ParityToStringConverter x:Key="ParityToStringConverter"/>
         <conv:StopBitsToStringConverter x:Key="StopBitsToStringConverter"/>
+        <conv:HexConverter x:Key="HexConverter"/>
     </Window.Resources>
 
     <WindowChrome.WindowChrome>
@@ -148,11 +149,19 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Адрес (Hex)" Grid.Column="0" HorizontalAlignment="Center" FontSize="12" Style="{DynamicResource TextBlockBase}"/>
+                    <TextBlock Text="Адрес (Hex/Dec)" Grid.Column="0" HorizontalAlignment="Center" FontSize="12" Style="{DynamicResource TextBlockBase}"/>
                     <TextBlock Text="PDU (сообщение)" Grid.Column="1" HorizontalAlignment="Center" FontSize="12" Style="{DynamicResource TextBlockBase}"/>
                     <TextBlock Text="CRC" Grid.Column="2" HorizontalAlignment="Center" FontSize="12" Style="{DynamicResource TextBlockBase}"/>
 
-                    <TextBox Grid.Row="1" Grid.Column="0" x:Name="AddressTextBox" Text="{Binding PortManager.Device.Address}"/>
+                    <TextBox Grid.Row="1" Grid.Column="0" 
+                 x:Name="AddressTextBox" 
+                 Text="{Binding PortManager.Device.Address, Converter={StaticResource HexConverter}, UpdateSourceTrigger=PropertyChanged}"
+                 PreviewTextInput="TextBox_PreviewHexInput"/>
+                    
+                    <TextBox Grid.Row="2" Grid.Column="0" 
+                 x:Name="AddressTextBoxDec" 
+                 Text="{Binding PortManager.Device.Address, UpdateSourceTrigger=PropertyChanged}"
+                 PreviewTextInput="TextBox_PreviewDigitInput"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" IsHitTestVisible="False" Text="HEX" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="DarkGray">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
@@ -165,7 +174,19 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="PDUTextBox"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" IsHitTestVisible="False" Text="DEC" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="DarkGray">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=AddressTextBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="PDUTextBox" PreviewTextInput="TextBox_PreviewHexInput" Text="{Binding PortManager.PDUView}"/>
                     <TextBlock Grid.Row="1" Grid.Column="1" IsHitTestVisible="False" Text="HEX" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="DarkGray">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
@@ -178,7 +199,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBox Grid.Row="1" Grid.Column="2" x:Name="CRCTextBox"/>
+                    <TextBox Grid.Row="1" Grid.Column="2" x:Name="CRCTextBox"  PreviewTextInput="TextBox_PreviewHexInput" Text="{Binding PortManager.CRCView}"/>
                     <TextBlock Grid.Row="1" Grid.Column="2" IsHitTestVisible="False" Text="HEX" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="DarkGray">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
@@ -192,8 +213,8 @@
                         </TextBlock.Style>
                     </TextBlock>
 
-                    <Button Content="Запросить" Grid.Row="2" Grid.Column="1" Margin="2" Height="20"/>
-                    <Button Content="Расчёт" Grid.Row="2" Grid.Column="2" Margin="2" Height="20"/>               
+                    <Button Content="Запросить" Grid.Row="2" Grid.Column="1" Margin="2" Height="20" Command="{Binding SendRequestCommand}"/>
+                    <Button Content="Расчёт" Grid.Row="2" Grid.Column="2" Margin="2" Height="20" Command="{Binding CalculateCRCCommand}"/>               
                     <TextBox Grid.Row="3" Grid.ColumnSpan="3" IsReadOnly="True"  Margin="10" TextAlignment="Justify" TextWrapping="Wrap">
                         <TextBox.Style>
                             <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">

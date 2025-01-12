@@ -14,7 +14,7 @@
                             TextChanged="textBox_TextChanged"
                             VerticalScrollBarVisibility="Auto"                             
                             AcceptsReturn="True" 
-                            IsReadOnly="False"                           
+                            IsReadOnly="True"                           
                  />
         <Button x:Name="clearButton" Content="X" 
                 Click="ClearButton_Click" 
