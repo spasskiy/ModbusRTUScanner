@@ -105,6 +105,31 @@ namespace ModbusRTUScanner.Model.RequestsWindowModel
             }
         }
 
+        //Применить настройки устройства к порту
+        public void SetupPort()
+        {
+            if (SerialPort == null)
+                throw new InvalidOperationException("SerialPort не инициализирован.");
+            if (Device == null)
+                throw new InvalidOperationException("Device не инициализирован.");
+
+            // Закрываем порт, если он открыт
+            if (SerialPort.IsOpen)
+            {
+                SerialPort.Close();
+            }
+
+            // Применяем настройки из Device к SerialPort
+            SerialPort.PortName = Device.PortName;
+            SerialPort.BaudRate = Device.Speed;
+            SerialPort.DataBits = Device.DataBits;
+            SerialPort.StopBits = Device.StopBits;
+            SerialPort.Parity = Device.Parity;
+
+            // Логирование (опционально)
+            Console.WriteLine($"Порт {SerialPort.PortName} настроен: BaudRate={SerialPort.BaudRate}, DataBits={SerialPort.DataBits}, StopBits={SerialPort.StopBits}, Parity={SerialPort.Parity}");
+        }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler? PropertyChanged;

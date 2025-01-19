@@ -30,9 +30,6 @@ namespace ModbusRTUScanner.ViewModel
             CalculateCRCCommand = new RelayCommand<object>(CalculateCRC);
             SendRequestCommand = new RelayCommand<object>(WriteManualADU);
             MessageLogger = new ModbusMessageLogger();
-            MessageLogger.logMessage(MessageType.Input, "TEST1");
-            MessageLogger.logMessage(MessageType.Output, "TEST2");
-
         }
 
         private void CalculateCRC(object _)
@@ -83,28 +80,28 @@ namespace ModbusRTUScanner.ViewModel
         private async void WriteManualADU(object _)
         {
             isNoOneExecuted = false;
-            ManualPacketContainer Container = new ManualPacketContainer(device);
-
-            Container.ResponseView = "";
+            string responseView;
+            
             OperationStatus = OperationStatus.Waiting;
-
-            if (Container.Address.HasValue && 
-                Container.PDUView != null && 
-                Container.PDUView.Length > 0 && 
-                Container.CRCView != null && 
-                Container.CRCView.Length > 0)
+            PortManager.Device.Address = 0;
+            if (PortManager.Device.Address != 0 &&
+                PortManager.PDUView != null &&
+                PortManager.PDUView.Length > 0 &&
+                PortManager.CRCView != null &&
+                PortManager.CRCView.Length > 0)
+                
             {
-                Container.PDU = new HexConverter().ConvertToByteArray(Container.PDUView);
-                Container.CRC = new HexConverter().ConvertToByteArray(Container.CRCView);
-                if (Container.CRC is not null && Container.CRC.Length == 2 && Container.PDU is not null && Container.PDU.Length > 0)
+                PortManager.PDU = new HexConverter().ConvertToByteArray(PortManager.PDUView);
+                PortManager.CRC = new HexConverter().ConvertToByteArray(PortManager.CRCView);
+                if (PortManager.CRC is not null && PortManager.CRC.Length == 2 && PortManager.PDU is not null && PortManager.PDU.Length > 0)
                 {
-                    byte[] message = new byte[] { Container.Address.Value }.Concat(Container.PDU).ToArray().Concat(Container.CRC).ToArray();
+                    byte[] message = new byte[] { PortManager.Device.Address.Value }.Concat(PortManager.PDU).ToArray().Concat(PortManager.CRC).ToArray();
 
-                    if (Container.ManualPacketContainerPort is not null && Container.ManualPacketContainerPortSettings is not null)
+                    if (PortManager.SerialPort is not null)
                     {
-                        Container.ManualPacketContainerPortSettings.DownloadSettingsToSerialPort(Container.ManualPacketContainerPort);
+                        PortManager.SetupPort();
 
-                        string logMessage = Container.Address.Value + " " + Container.PDUView + " " + Container.CRCView;
+                        string logMessage = PortManager.Device.Address.Value.ToString("X2") + " " + PortManager.PDUView + " " + PortManager.CRCView;
                         MessageLogger.logMessage(MessageType.Output, logMessage);
 
                         try
@@ -112,21 +109,21 @@ namespace ModbusRTUScanner.ViewModel
                             // Создание буфера для чтения данных
                             byte[] buffer = new byte[1024]; // Размер буфера для чтения данных
 
-                            if (Container.ManualPacketContainerPort.IsOpen == false)
-                                Container.ManualPacketContainerPort.Open();
-                            Container.ManualPacketContainerPort.Write(message, 0, message.Length);
+                            if (PortManager.SerialPort.IsOpen == false)
+                                PortManager.SerialPort.Open();
+                            PortManager.SerialPort.Write(message, 0, message.Length);
                             // Чтение данных из порта
-                            await Task.Delay(Container.ManualPacketContainerPort.ReadTimeout / 2);
-                            int bytesRead = Container.ManualPacketContainerPort.Read(buffer, 0, buffer.Length);
-                            Container.ManualPacketContainerPort.Close();
+                            await Task.Delay(PortManager.SerialPort.ReadTimeout / 2);
+                            int bytesRead = PortManager.SerialPort.Read(buffer, 0, buffer.Length);
+                            PortManager.SerialPort.Close();
                             // Создание нового массива байтов с размером, соответствующим количеству фактически прочитанных байт
                             byte[] responseBytes = new byte[bytesRead];
                             Array.Copy(buffer, responseBytes, bytesRead);
 
                             // Преобразование каждого байта в строку в формате hex и разделение пробелами
-                            Container.ResponseView = string.Join(" ", responseBytes.Select(b => b.ToString("X2")));
+                            responseView = string.Join(" ", responseBytes.Select(b => b.ToString("X2")));
                             OperationStatus = OperationStatus.Success;
-                            MessageLogger.logMessage(MessageType.Input, Container.ResponseView);
+                            MessageLogger.logMessage(MessageType.Input, responseView);
                         }
                         catch (TimeoutException)
                         {
@@ -134,7 +131,7 @@ namespace ModbusRTUScanner.ViewModel
                         }
                         catch (Exception ex)
                         {
-                            new MessageBoxCustom().ShowWarning(ex.Message);
+                            new MessageBoxCustom().ShowWarning(ex.Message + "\nПроверьте настройки порта");
                         }
 
 
@@ -152,9 +149,7 @@ namespace ModbusRTUScanner.ViewModel
             }
             else
             {
-                new MessageBoxCustom().ShowWarning("Недопустимое сообщение");
-                string logMessage = Container.Address.Value.ToString("X2") + " " + Container.PDUView + " " + Container.CRCView;
-                MessageLogger.logMessage(MessageType.Output, logMessage);
+                new MessageBoxCustom().ShowWarning("Недопустимое сообщение");               
             }
 
             isNoOneExecuted = true;

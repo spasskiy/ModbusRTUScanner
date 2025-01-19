@@ -10,21 +10,27 @@ namespace ModbusRTUScanner.Model
 {
     public class ModbusDevice : IEquatable<ModbusDevice>, ICloneable, INotifyPropertyChanged
     {
-        private int _address;
-        public int Address 
-        { 
-            get => _address; 
-            set => SetOptions(nameof(Address), ref _address, value);
+        private byte? _address;
+        public byte? Address
+        {
+            get => _address;
+            set
+            {
+                if (value > 0 && value < 256)
+                    SetOptions(nameof(Address), ref _address, value);
+            }
+
+
         }
         public string PortName { get; init; }
         public int Speed { get; init; }
         public int DataBits { get; init; }
         public StopBits StopBits { get; init; }
-        public Parity Parity { get; init; }        
+        public Parity Parity { get; init; }
 
         public ModbusDevice(int address, string portName, int speed, int dataBits, StopBits stopBits, Parity parity)
         {
-            Address = address;
+            Address = (byte)address;
             PortName = portName;
             Speed = speed;
             DataBits = dataBits;
@@ -58,7 +64,7 @@ namespace ModbusRTUScanner.Model
         {
             // Создаем новый объект ModbusDevice с теми же значениями свойств
             return new ModbusDevice(
-                Address,    // Копируем значение Address
+                Address.Value,    // Копируем значение Address
                 PortName,   // Копируем значение PortName
                 Speed,      // Копируем значение Speed
                 DataBits,   // Копируем значение DataBits

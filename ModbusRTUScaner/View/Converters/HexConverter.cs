@@ -17,6 +17,10 @@ namespace ModbusRTUScanner.View.Converters
             {
                 return intValue.ToString("X"); // Форматирование в HEX
             }
+            else if (value is byte byteValue)
+            {
+                return byteValue.ToString("X"); // Форматирование в HEX
+            }
             return string.Empty;
         }
 
