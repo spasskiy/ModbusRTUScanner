@@ -254,10 +254,10 @@
 
         <Grid Grid.Column="1" x:Name="LogViewControl">
             <GroupBox  Style="{StaticResource GroupBoxBaseStyle}"  Header="Лог">
-                <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding MessageLogger.MessageLog}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderThickness="1" Padding="3">
+                            <Border BorderThickness="1" Padding="3"  Style="{StaticResource MessageBorderStyle}">
                                 <StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Время запроса : "/>

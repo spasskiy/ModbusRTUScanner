@@ -73,9 +73,6 @@ namespace ModbusRTUScanner.Model.RequestsWindowModel
                 }
                 else
                     SetOptions(nameof(AddressView), ref _addressView, value);
-
-
-
             }
         }
 

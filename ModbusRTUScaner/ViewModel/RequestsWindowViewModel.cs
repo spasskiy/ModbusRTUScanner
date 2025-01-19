@@ -19,7 +19,6 @@ namespace ModbusRTUScanner.ViewModel
     class RequestsWindowViewModel
     {
         private bool isNoOneExecuted = true;
-        public ManualPacketContainer Container { get; set; }
         public ICommand CalculateCRCCommand { get; }
         public ICommand SendRequestCommand { get; }
 
@@ -30,8 +29,10 @@ namespace ModbusRTUScanner.ViewModel
             PortManager = new RequestPortManager(device);
             CalculateCRCCommand = new RelayCommand<object>(CalculateCRC);
             SendRequestCommand = new RelayCommand<object>(WriteManualADU);
+            MessageLogger = new ModbusMessageLogger();
+            MessageLogger.logMessage(MessageType.Input, "TEST1");
+            MessageLogger.logMessage(MessageType.Output, "TEST2");
 
-            Container = new ManualPacketContainer(device);
         }
 
         private void CalculateCRC(object _)
@@ -65,6 +66,16 @@ namespace ModbusRTUScanner.ViewModel
             }
         }
 
+        private ModbusMessageLogger _messageLogger;
+        /// <summary>
+        /// Хранитель логов
+        /// </summary>
+        public ModbusMessageLogger MessageLogger
+        {
+            get => _messageLogger;
+            set => SetOptions(nameof(MessageLogger), ref _messageLogger, value);
+        }
+
         /// <summary>
         /// Записать вручную собранное сообщение в текущий порт
         /// </summary>
@@ -72,6 +83,7 @@ namespace ModbusRTUScanner.ViewModel
         private async void WriteManualADU(object _)
         {
             isNoOneExecuted = false;
+            ManualPacketContainer Container = new ManualPacketContainer(device);
 
             Container.ResponseView = "";
             OperationStatus = OperationStatus.Waiting;
@@ -93,7 +105,7 @@ namespace ModbusRTUScanner.ViewModel
                         Container.ManualPacketContainerPortSettings.DownloadSettingsToSerialPort(Container.ManualPacketContainerPort);
 
                         string logMessage = Container.Address.Value + " " + Container.PDUView + " " + Container.CRCView;
-
+                        MessageLogger.logMessage(MessageType.Output, logMessage);
 
                         try
                         {
@@ -114,6 +126,7 @@ namespace ModbusRTUScanner.ViewModel
                             // Преобразование каждого байта в строку в формате hex и разделение пробелами
                             Container.ResponseView = string.Join(" ", responseBytes.Select(b => b.ToString("X2")));
                             OperationStatus = OperationStatus.Success;
+                            MessageLogger.logMessage(MessageType.Input, Container.ResponseView);
                         }
                         catch (TimeoutException)
                         {
@@ -140,6 +153,8 @@ namespace ModbusRTUScanner.ViewModel
             else
             {
                 new MessageBoxCustom().ShowWarning("Недопустимое сообщение");
+                string logMessage = Container.Address.Value.ToString("X2") + " " + Container.PDUView + " " + Container.CRCView;
+                MessageLogger.logMessage(MessageType.Output, logMessage);
             }
 
             isNoOneExecuted = true;
