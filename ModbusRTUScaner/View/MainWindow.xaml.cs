@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ModbusRTUScanner.ViewModel;
+using ModbusRTUScanner.View.MessageBoxCustom;
 
 namespace ModbusRTUScanner
 {
@@ -19,7 +20,7 @@ namespace ModbusRTUScanner
     {
         public MainWindow()
         {            
-            InitializeComponent();           
+            InitializeComponent();            
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)

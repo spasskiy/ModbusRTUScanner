@@ -132,9 +132,20 @@ namespace ModbusRTUScanner.Model.RequestsWindowModel
             }
         }
 
-        public ManualPacketContainer()
+        public ManualPacketContainer(ModbusDevice device)
         {
+            if (device == null)
+                throw new ArgumentNullException(nameof(device));
 
+            // Заполняем свойства на основе ModbusDevice
+            Address = (byte)device.Address;
+            AddressView = device.Address.ToString("X2"); // Преобразуем адрес в шестнадцатеричный вид
+
+            // Создаем и настраиваем SerialPort
+            ManualPacketContainerPort = new SerialPort(device.PortName, device.Speed, device.Parity, device.DataBits, device.StopBits);
+
+            // Инициализируем настройки порта
+            ManualPacketContainerPortSettings = new SerialPortSettings(ManualPacketContainerPort);
 
         }
 

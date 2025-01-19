@@ -124,6 +124,23 @@ namespace ModbusRTUScanner.Model
             }
         }
 
+        /// <summary>
+        /// Установка настроек на порт
+        /// </summary>
+        /// <param name="serialPort"></param>
+        public void DownloadSettingsToSerialPort(SerialPort serialPort)
+        {
+            if (serialPort.PortName == PortName)
+            {
+                serialPort.BaudRate = int.Parse(BaudRate);
+                serialPort.DataBits = DataBits;
+                serialPort.StopBits = StopBits;
+                serialPort.Parity = Parity;
+                serialPort.WriteTimeout = WriteTimeout;
+                serialPort.ReadTimeout = ReadTimeout;
+            }
+        }
+
         #region INotifyPropertyChanged
         /// <summary>
         /// Событие, возникающее при изменении свойства

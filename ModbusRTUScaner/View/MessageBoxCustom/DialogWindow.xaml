@@ -1,0 +1,35 @@
+﻿<Window x:Class="ModbusRTUScanner.View.MessageBoxCustom.DialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ModbusRTUScanner.View.MessageBoxCustom"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        Title="WarningWindow" Height="Auto" Width="Auto">
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="0"/>
+    </WindowChrome.WindowChrome>
+    <Grid>
+        <Border Margin="5" BorderThickness="1" Padding=" 5">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Question.png" Stretch="UniformToFill" Height="50"/>
+                    <TextBlock Text="{Binding warning}" FontSize="20" FontWeight="Bold" Margin="5"/>
+                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="{Binding yes}" IsDefault="True" Padding="5" Margin="5" Height="30" Click="Yes_Click"/>
+                    <Button Content="{Binding no}" IsCancel="True" IsDefault="True" Padding="5" Margin="5" Height="30" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

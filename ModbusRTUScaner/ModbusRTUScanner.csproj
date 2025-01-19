@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Exclamation.png" />
     <None Remove="Resources\Fonts\A25Kamadjaja.otf" />
     <None Remove="Resources\Fonts\flightcorps3dital.ttf" />
     <None Remove="Resources\Fonts\JРІrРІmiah.ttf" />
@@ -16,13 +17,24 @@
     <None Remove="Resources\Fonts\pistoleersemital.ttf" />
     <None Remove="Resources\Images\Day.png" />
     <None Remove="Resources\Images\Night.png" />
+    <None Remove="Resources\Info.png" />
+    <None Remove="Resources\Question.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Resources\Exclamation.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Images\Day.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Images\Night.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Info.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Question.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
