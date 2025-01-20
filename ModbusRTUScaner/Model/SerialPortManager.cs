@@ -92,10 +92,9 @@ namespace ModbusRTUScanner.Model
             get => _selectedPort;
             set
             {
-                if (value is not null)
-                {
+
                     SetOptions(nameof(SelectedPort), ref _selectedPort, value);
-                }                
+                                
             }
         }
 

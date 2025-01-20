@@ -53,14 +53,14 @@ namespace ModbusRTUScanner.Model
             CommandManager = scannerCommandManager;
             Devices = devices;
             //HACK: Для теста
-            Devices.Devices.Add
-                (
-                    new ModbusDevice(144, "COM1", 9999, 8, StopBits.Two, Parity.Even)
-                );
-            Devices.Devices.Add
-                (
-                    new ModbusDevice(222, "COM1", 1111, 8, StopBits.Two, Parity.Even)
-                );
+            //Devices.Devices.Add
+            //    (
+            //        new ModbusDevice(144, "COM1", 9999, 8, StopBits.Two, Parity.Even)
+            //    );
+            //Devices.Devices.Add
+            //    (
+            //        new ModbusDevice(222, "COM1", 1111, 8, StopBits.Two, Parity.Even)
+            //    );
         }
 
     }
