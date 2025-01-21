@@ -252,8 +252,8 @@
             </StackPanel>
         </GroupBox>
 
-        <Grid Grid.Column="1" x:Name="LogViewControl">
-            <GroupBox  Style="{StaticResource GroupBoxBaseStyle}"  Header="Лог">
+        <Grid Grid.Column="1" x:Name="LogViewControl" >
+            <GroupBox  Style="{StaticResource GroupBoxBaseStyle}"  Header="Лог" >
                 <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding MessageLogger.MessageLog}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -267,7 +267,10 @@
                                         <TextBlock Text="Тип запроса : "/>
                                         <TextBlock Text="{Binding MessageType}" FontWeight="Bold"/>
                                     </StackPanel>
-                                    <TextBox Text="{Binding MessageContent}" TextWrapping="Wrap" IsReadOnly="True"/>
+                                    <TextBox Text="{Binding MessageContent}" 
+                                 TextWrapping="Wrap" 
+                                 IsReadOnly="True" 
+                                 MaxWidth="460" />
                                 </StackPanel>
                             </Border>
                         </DataTemplate>

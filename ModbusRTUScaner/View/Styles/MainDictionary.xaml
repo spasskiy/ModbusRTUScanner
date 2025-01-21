@@ -222,7 +222,7 @@
 
     <Style TargetType="ListBox">
         <Setter Property="Background"
-             Value="Lavender"/>
+             Value="{DynamicResource MainBackgroundBrush}"/>
     </Style>
 
     <Style TargetType="Border">
@@ -412,6 +412,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Margin" Value="1" />
     </Style>
+    
 
     <Style TargetType="RadioButton">
         <Setter Property="Foreground" Value="{DynamicResource InactiveText}"/>
@@ -455,5 +456,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
 </ResourceDictionary>

@@ -16,8 +16,8 @@
         <Border Margin="5" BorderThickness="1" Padding=" 5">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Resources/Info.png" Stretch="UniformToFill" Height="50"/>
-                    <TextBlock Text="{Binding Message}" FontSize="20" FontWeight="Bold" Margin="5"/>
+                    <Image Source="/Resources/Images/Info.png" Stretch="UniformToFill" Height="50"/>
+                    <TextBlock Style="{DynamicResource TextBlockBase}" Text="{Binding Message}" FontSize="20" FontWeight="Bold" Margin="5"/>
                 </StackPanel>
                 <Button Content="OK" IsDefault="True" Padding="5" Margin="5" Height="30" IsCancel="True"/>
             </StackPanel>

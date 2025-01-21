@@ -16,8 +16,8 @@
         <Border Margin="5" BorderThickness="1" Padding=" 5">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Resources/Exclamation.png" Stretch="UniformToFill" Height="50"/>
-                    <TextBlock Text="{Binding warning}" FontSize="20" FontWeight="Bold" Margin="5" TextAlignment="Center"/>
+                    <Image Source="/Resources/Images/Exclamation.png" Stretch="UniformToFill" Height="50"/>
+                    <TextBlock Style="{DynamicResource TextBlockBase}" Text="{Binding warning}" FontSize="20" FontWeight="Bold" Margin="5" TextAlignment="Center"/>
                 </StackPanel>
                 <Button Content="OK" IsCancel="True" IsDefault="True" Padding="5" Margin="5" Height="30"/>
             </StackPanel>

@@ -12,6 +12,7 @@
         Style="{StaticResource CustomWindowStyle}"
         DataContext="{DynamicResource MainWindowViewModel}"    
         mc:Ignorable="d"
+        Icon="/Resources/Images/logo2.ico"
         WindowStartupLocation="CenterScreen"
         MinWidth="1000"
         MinHeight="650"

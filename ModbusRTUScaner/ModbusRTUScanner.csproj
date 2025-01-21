@@ -16,25 +16,29 @@
     <None Remove="Resources\Fonts\metronautssuperital.otf" />
     <None Remove="Resources\Fonts\pistoleersemital.ttf" />
     <None Remove="Resources\Images\Day.png" />
+    <None Remove="Resources\Images\logo2.ico" />
     <None Remove="Resources\Images\Night.png" />
     <None Remove="Resources\Info.png" />
     <None Remove="Resources\Question.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\Exclamation.png">
+    <Content Include="Resources\Images\Exclamation.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Images\Day.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Images\logo2.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Images\Night.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Info.png">
+    <Content Include="Resources\Images\Info.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Question.png">
+    <Content Include="Resources\Images\Question.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
