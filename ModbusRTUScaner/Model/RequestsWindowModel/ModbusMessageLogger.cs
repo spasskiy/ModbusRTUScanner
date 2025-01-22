@@ -21,7 +21,7 @@ namespace ModbusRTUScanner.Model.RequestsWindowModel
             get { return messageLog; }
         }
 
-        public void logMessage(MessageType messageType, string messageContent)
+        public void LogMessage(MessageType messageType, string messageContent)
         {
             MessageLogEntry message = new MessageLogEntry(DateTime.Now, messageType, messageContent);
             messageLog.Add(message);

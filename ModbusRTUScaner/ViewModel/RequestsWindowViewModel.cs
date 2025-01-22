@@ -28,7 +28,7 @@ namespace ModbusRTUScanner.ViewModel
         { 
             PortManager = new RequestPortManager(device);
             CalculateCRCCommand = new RelayCommand<object>(CalculateCRC);
-            SendRequestCommand = new RelayCommand<object>(WriteManualADU);
+            SendRequestCommand = new RelayCommand<object>(async _ => await WriteManualADUAsync(_));
             MessageLogger = new ModbusMessageLogger();
         }
 
@@ -77,83 +77,109 @@ namespace ModbusRTUScanner.ViewModel
         /// Записать вручную собранное сообщение в текущий порт
         /// </summary>
         /// <param name="_"></param>
-        private async void WriteManualADU(object _)
+        private async Task WriteManualADUAsync(object _)
         {
             isNoOneExecuted = false;
-            string responseView;
-            
-            OperationStatus = OperationStatus.Waiting;
-            PortManager.Device.Address = 0;
-            if (PortManager.Device.Address != 0 &&
-                PortManager.PDUView != null &&
-                PortManager.PDUView.Length > 0 &&
-                PortManager.CRCView != null &&
-                PortManager.CRCView.Length > 0)
-                
+
+            try
             {
-                PortManager.PDU = new HexConverter().ConvertToByteArray(PortManager.PDUView);
-                PortManager.CRC = new HexConverter().ConvertToByteArray(PortManager.CRCView);
-                if (PortManager.CRC is not null && PortManager.CRC.Length == 2 && PortManager.PDU is not null && PortManager.PDU.Length > 0)
+                OperationStatus = OperationStatus.Waiting;
+                PortManager.Device.Address = 0;
+
+                if (!ValidateMessage())
                 {
-                    byte[] message = new byte[] { PortManager.Device.Address.Value }.Concat(PortManager.PDU).ToArray().Concat(PortManager.CRC).ToArray();
-
-                    if (PortManager.SerialPort is not null)
-                    {
-                        PortManager.SetupPort();
-
-                        string logMessage = PortManager.Device.Address.Value.ToString("X2") + " " + PortManager.PDUView + " " + PortManager.CRCView;
-                        MessageLogger.logMessage(MessageType.Output, logMessage);
-
-                        try
-                        {
-                            // Создание буфера для чтения данных
-                            byte[] buffer = new byte[1024]; // Размер буфера для чтения данных
-
-                            if (PortManager.SerialPort.IsOpen == false)
-                                PortManager.SerialPort.Open();
-                            PortManager.SerialPort.Write(message, 0, message.Length);
-                            // Чтение данных из порта
-                            await Task.Delay(PortManager.SerialPort.ReadTimeout / 2);
-                            int bytesRead = PortManager.SerialPort.Read(buffer, 0, buffer.Length);
-                            PortManager.SerialPort.Close();
-                            // Создание нового массива байтов с размером, соответствующим количеству фактически прочитанных байт
-                            byte[] responseBytes = new byte[bytesRead];
-                            Array.Copy(buffer, responseBytes, bytesRead);
-
-                            // Преобразование каждого байта в строку в формате hex и разделение пробелами
-                            responseView = string.Join(" ", responseBytes.Select(b => b.ToString("X2")));
-                            OperationStatus = OperationStatus.Success;
-                            MessageLogger.logMessage(MessageType.Input, responseView);
-                        }
-                        catch (TimeoutException)
-                        {
-                            new MessageBoxCustom().ShowWarning("Превышено время ожидания ответа");
-                        }
-                        catch (Exception ex)
-                        {
-                            new MessageBoxCustom().ShowWarning(ex.Message + "\nПроверьте настройки порта");
-                        }
-
-
-                    }
-                    else
-                    {
-                        new MessageBoxCustom().ShowWarning("Проверьте настройки порта");
-                    }
-
+                    ShowWarning("Недопустимое сообщение");
+                    return;
                 }
-                else
+
+                byte[] message = PrepareMessage();
+                if (message == null)
                 {
-                    new MessageBoxCustom().ShowWarning("Неприемлемое сообщение");
+                    ShowWarning("Неприемлемое сообщение");
+                    return;
                 }
+
+                string logMessage = $"{PortManager.Device.Address.Value:X2} {PortManager.PDUView} {PortManager.CRCView}";
+                MessageLogger.LogMessage(MessageType.Output, logMessage);
+
+                byte[] responseBytes = await SendAndReceiveDataAsync(message);
+                string responseView = ConvertToHexString(responseBytes);
+
+                OperationStatus = OperationStatus.Success;
+                MessageLogger.LogMessage(MessageType.Input, responseView);
             }
-            else
+            catch (TimeoutException)
             {
-                new MessageBoxCustom().ShowWarning("Недопустимое сообщение");               
+                ShowWarning("Превышено время ожидания ответа");
+            }
+            catch (Exception ex)
+            {
+                ShowWarning($"{ex.Message}\nПроверьте настройки порта");
+            }
+            finally
+            {
+                isNoOneExecuted = true;
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
+
+        private bool ValidateMessage()
+        {
+            return PortManager.Device.Address != 0 &&
+                   PortManager.PDUView != null &&
+                   PortManager.PDUView.Length > 0 &&
+                   PortManager.CRCView != null &&
+                   PortManager.CRCView.Length > 0;
+        }
+
+        private byte[] PrepareMessage()
+        {
+            PortManager.PDU = new HexConverter().ConvertToByteArray(PortManager.PDUView);
+            PortManager.CRC = new HexConverter().ConvertToByteArray(PortManager.CRCView);
+
+            if (PortManager.CRC == null || PortManager.CRC.Length != 2 || PortManager.PDU == null || PortManager.PDU.Length == 0)
+                return null;
+
+            return new byte[] { PortManager.Device.Address.Value }
+                .Concat(PortManager.PDU)
+                .Concat(PortManager.CRC)
+                .ToArray();
+        }
+
+        private async Task<byte[]> SendAndReceiveDataAsync(byte[] message)
+        {
+            if (PortManager.SerialPort == null)
+            {
+                ShowWarning("Проверьте настройки порта");
+                return Array.Empty<byte>();
             }
 
-            isNoOneExecuted = true;
-            CommandManager.InvalidateRequerySuggested();
+            PortManager.SetupPort();
+
+            if (!PortManager.SerialPort.IsOpen)
+                PortManager.SerialPort.Open();
+
+            byte[] buffer = new byte[1024];
+            PortManager.SerialPort.Write(message, 0, message.Length);
+
+            await Task.Delay(PortManager.SerialPort.ReadTimeout / 2);
+            int bytesRead = PortManager.SerialPort.Read(buffer, 0, buffer.Length);
+            PortManager.SerialPort.Close();
+
+            byte[] responseBytes = new byte[bytesRead];
+            Array.Copy(buffer, responseBytes, bytesRead);
+
+            return responseBytes;
+        }
+
+        private string ConvertToHexString(byte[] bytes)
+        {
+            return string.Join(" ", bytes.Select(b => b.ToString("X2")));
+        }
+
+        private void ShowWarning(string message)
+        {
+            new MessageBoxCustom().ShowWarning(message);
         }
 
         #region INotifyPropertyChanged
