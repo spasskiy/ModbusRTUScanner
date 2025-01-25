@@ -1,4 +1,5 @@
-﻿using ModbusRTUScanner.View;
+﻿using ModbusRTUScanner.Model.RequestsWindowModel;
+using ModbusRTUScanner.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,11 @@ namespace ModbusRTUScanner.Model
 {
     public class ScannerCommandManager
     {
+        SerialPortManager _portManager;
+        MainWindowViewModelFlags _flagsManager;
+        ConsoleManager _console;
+        DeviceManager _deviceManager;
+
         /// <summary>
         /// Токен отмены
         /// </summary>
@@ -31,8 +37,13 @@ namespace ModbusRTUScanner.Model
 
         public ScannerCommandManager(SerialPortManager portManager, MainWindowViewModelFlags flagsManager, ConsoleManager console, DeviceManager deviceManager)
         {
+            _portManager = portManager;
+            _flagsManager = flagsManager;
+            _console = console;
+            _deviceManager = deviceManager;
+
             SwitchThemeCommand = new RelayCommand<object>((_) => flagsManager.IsNightModeOn = !flagsManager.IsNightModeOn);
-            FindDevicesCommand = new RelayCommand<object>(async (_) => await Task.Run(() => new DeviceFinderBuilder().Build(portManager, flagsManager.IsScanRunSet, console.AddNode, deviceManager.Devices).FindDevices(GetCancelationTokken())));
+            FindDevicesCommand = new RelayCommand<object>(async (_) => await FindDevicesAsync());
             DeleteDevicesCommand = new RelayCommand<object>((_) => deviceManager.Devices.Remove(deviceManager.SelectedDevice));
             RequestCommand = new RelayCommand<object>((_) => new RequestsWindow(deviceManager.SelectedDevice).ShowDialog());
             CancelCommand = new RelayCommand<object>((_) => _cancellationTokenSource.Cancel());
@@ -42,7 +53,24 @@ namespace ModbusRTUScanner.Model
             UpdatePortsCommand = new RelayCommand<object>(portManager.UpdatePorts);
             TestCommand = new RelayCommand<object>((_) => portManager.CurrentAddress++);
             CloseAppCommand = new RelayCommand<object>((_) => System.Windows.Application.Current.Shutdown());
-        }       
+        }
+
+        private async Task FindDevicesAsync()
+        {
+            if(_portManager.SelectedPort == null)
+            {
+                new MessageBoxCustom().ShowWarning("Выберите порт");
+            }
+            else
+            {
+                await Task.Run(() =>
+                {
+                    var deviceFinder = new DeviceFinderBuilder()
+                        .Build(_portManager, _flagsManager.IsScanRunSet, _console.AddNode, _deviceManager.Devices);
+                    deviceFinder.FindDevices(GetCancelationTokken());
+                });
+            }
+        }
 
         /// <summary>
         /// Возвращает токен отмены

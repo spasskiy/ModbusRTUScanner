@@ -11,13 +11,13 @@ namespace ModbusRTUScanner.Model
     internal class DeviceFinderBuilder
     {
 
-        public DeviceFinder Build(SerialPortManager portManager, Action<bool> swichIsScanRun, Action<string> addStringToConsole, ObservableCollection<ModbusDevice> devices)
+        public DeviceFinder? Build(SerialPortManager portManager, Action<bool> swichIsScanRun, Action<string> addStringToConsole, ObservableCollection<ModbusDevice> devices)
         {
             SerialPort? port = portManager.GetCurrentPort();
             var speeds = ExtractSelectedSpeeds(portManager);
             if (port == null)
-            {                
-                throw new Exception("No port selected");
+            {
+                return null;
             }
             return new DeviceFinder(portManager, swichIsScanRun, addStringToConsole, devices);
         }
