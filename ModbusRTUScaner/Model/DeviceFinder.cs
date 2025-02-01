@@ -1,4 +1,5 @@
 ﻿using ModbusRTUScanner.Model.ModbusML;
+using ModbusRTUScanner.Model.RequestsWindowModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -84,6 +85,10 @@ namespace ModbusRTUScanner.Model
                     _addStringToConsole("Сканирование отменено");
                 else
                     _addStringToConsole("Сканирование окончено");             
+            }
+            catch (Exception ex)
+            {
+                new MessageBoxCustom().ShowWarning("Порт не поддерживает заданную скорость");
             }
             finally
             {

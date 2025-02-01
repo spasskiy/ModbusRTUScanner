@@ -28,11 +28,7 @@ namespace ModbusRTUScanner
             MessageBox.Show((this.DataContext as MainWindowViewModel).ViewManager.ScannerConsole.ConsoleOutput);
         }
 
-        private void TreeViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show("THIS");
-            
-        }
+
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {

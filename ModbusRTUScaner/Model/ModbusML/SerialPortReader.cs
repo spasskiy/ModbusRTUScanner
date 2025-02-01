@@ -88,27 +88,24 @@ namespace ModbusRTUScanner.Model.ModbusML
 
 
         /// <summary>
-        /// Определяет актуальную задержку для текущей скорости
+        /// Определяет актуальную задержку для текущей скорости,
+        /// используя степенную функцию, подобранную по граничным условиям:
+        /// при скорости 300 мс – задержка 1000 мс, при 115200 мс – 5 мс.
         /// </summary>
-        /// <param name="portSpeed"></param>
-        /// <returns></returns>
+        /// <param name="portSpeed">Скорость порта</param>
+        /// <returns>Задержка в миллисекундах</returns>
         private int GetActualDelay(int portSpeed)
         {
-            switch (portSpeed)
-            {
-                case var v when v >= 115200:
-                    return 5;
-                case var v when v >= 57600:
-                    return 10;
-                case var v when v >= 9600:
-                    return 30;
-                case var v when v >= 1000:
-                    return 250;
-                case var v when v >= 300:
-                    return 750;
-                default:
-                    return 1000;
-            }
+            if (portSpeed <= 300)
+                return 1000;
+            if (portSpeed >= 115200)
+                return 5;
+
+            const double A = 159400;
+            const double B = -0.889;
+            double delay = A * Math.Pow(portSpeed, B);
+            return (int)Math.Round(delay);
         }
+
     }
 }
