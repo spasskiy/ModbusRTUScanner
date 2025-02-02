@@ -69,6 +69,9 @@ namespace ModbusRTUScanner.Model
                         .Build(_portManager, _flagsManager.IsScanRunSet, _console.AddNode, _deviceManager.Devices);
                     deviceFinder.FindDevices(GetCancelationTokken());
                 });
+#if DEBUG
+                _deviceManager.Devices.Add(new ModbusDevice("DEBUG"));
+#endif
             }
         }
 

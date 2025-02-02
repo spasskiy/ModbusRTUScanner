@@ -15,7 +15,7 @@
         Icon="/Resources/Images/logo2.ico"
         WindowStartupLocation="CenterScreen"
         MinWidth="1000"
-        MinHeight="650"
+        MinHeight="650"        
         x:Name="ThisWindow"
         Title="MainWindow" Width="1000" Height="650">
     <Window.Resources>
@@ -261,7 +261,7 @@
                     </Grid>
                 </Border>
             </Grid>
-            <Button Grid.Column="3" Grid.Row="1" Content="ВЫХОД" Margin="0 0 -1 -1" Command="{Binding ViewManager.CommandManager.CloseAppCommand}"/>
+            <Button Grid.Column="3" Grid.Row="1" Content="ВЫХОД" Margin="5 5 -1 -1" Command="{Binding ViewManager.CommandManager.CloseAppCommand}"/>
         </Grid>
     </Grid>
 </Window>

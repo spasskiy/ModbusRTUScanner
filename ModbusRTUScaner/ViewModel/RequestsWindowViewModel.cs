@@ -23,9 +23,9 @@ namespace ModbusRTUScanner.ViewModel
         public ICommand SendRequestCommand { get; }
 
 
-        public RequestPortManager PortManager { get; set; }        
-        public RequestsWindowViewModel(ModbusDevice device) 
-        { 
+        public RequestPortManager PortManager { get; set; }
+        public RequestsWindowViewModel(ModbusDevice device)
+        {
             PortManager = new RequestPortManager(device);
             CalculateCRCCommand = new RelayCommand<object>(CalculateCRC);
             SendRequestCommand = new RelayCommand<object>(async _ => await WriteManualADUAsync(_));
@@ -110,7 +110,12 @@ namespace ModbusRTUScanner.ViewModel
             }
             catch (TimeoutException)
             {
-                ShowWarning("Превышено время ожидания ответа");
+#if DEBUG
+                MessageLogger.LogMessage(MessageType.Input, "03 00 07 05 08 08 0A 00 00 00 AD 0F 03 FF FF 05 7D 30 50");
+#else
+                             ShowWarning("Превышено время ожидания ответа");
+#endif
+
             }
             catch (Exception ex)
             {

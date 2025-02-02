@@ -38,6 +38,21 @@ namespace ModbusRTUScanner.Model
             Parity = parity;
         }
 
+#if DEBUG
+        public ModbusDevice(string message)
+        {
+            if (message == "DEBUG")
+            {
+                Address = 10;
+                PortName = "COM1";
+                Speed = 115200;
+                DataBits = 8;
+                StopBits = StopBits.One;
+                Parity = Parity.None;
+            }
+        }
+#endif
+
         public bool Equals(ModbusDevice other)
         {
             if (other == null)
