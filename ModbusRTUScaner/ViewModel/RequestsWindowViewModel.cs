@@ -125,6 +125,7 @@ namespace ModbusRTUScanner.ViewModel
             {
                 isNoOneExecuted = true;
                 CommandManager.InvalidateRequerySuggested();
+                PortManager.SerialPort.Close();
             }
         }
 
@@ -173,6 +174,8 @@ namespace ModbusRTUScanner.ViewModel
 
             byte[] responseBytes = new byte[bytesRead];
             Array.Copy(buffer, responseBytes, bytesRead);
+
+            PortManager.SerialPort.Close();
 
             return responseBytes;
         }

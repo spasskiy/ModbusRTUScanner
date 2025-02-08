@@ -106,7 +106,8 @@ namespace ModbusRTUScanner.Model
             }
             try
             {
-                _portManager.SelectedPort.Open();
+                if(!_portManager.SelectedPort.IsOpen)
+                    _portManager.SelectedPort.Open();
             }
             catch (Exception ex)
             {
