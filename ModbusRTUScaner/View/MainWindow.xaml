@@ -220,19 +220,31 @@
                     </Grid.RowDefinitions>
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <TreeView ItemsSource="{Binding ViewManager.Devices.Devices}"                                  
-                                  Background="{DynamicResource MainBackgroundBrush}" 
-                                  BorderBrush="Red" 
-                                  BorderThickness="0">
-                                    <i:Interaction.Behaviors>
-                                        <e:BindableSelectedItemBehavior SelectedItem="{Binding ViewManager.Devices.SelectedDevice, Mode=TwoWay}" />
-                                    </i:Interaction.Behaviors>                            
+                      Background="{DynamicResource MainBackgroundBrush}" 
+                      BorderBrush="Red" 
+                      BorderThickness="0">
+                            <i:Interaction.Behaviors>
+                                <e:BindableSelectedItemBehavior SelectedItem="{Binding ViewManager.Devices.SelectedDevice, Mode=TwoWay}" />
+                            </i:Interaction.Behaviors>
                             <TreeView.Resources>
                                 <ResourceDictionary Source="Styles/ModbusDeviceTreeViewTemplate.xaml"/>
                             </TreeView.Resources>
                             <TreeView.ItemTemplate>
-                                <DynamicResource ResourceKey="ModbusDeviceTemplate"/>
+                                <DataTemplate>
+                                    <ContentControl Content="{Binding}">
+                                        <ContentControl.ContentTemplate>
+                                            <DynamicResource ResourceKey="ModbusDeviceTemplate"/>
+                                        </ContentControl.ContentTemplate>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseDoubleClick">
+                                                <i:InvokeCommandAction 
+                                    Command="{Binding DataContext.ViewManager.CommandManager.RequestCommand, RelativeSource={RelativeSource AncestorType=TreeView}}"
+                                    CommandParameter="{Binding}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ContentControl>
+                                </DataTemplate>
                             </TreeView.ItemTemplate>
-                            
                         </TreeView>
                     </ScrollViewer>
                     <Grid Grid.Row="1">
