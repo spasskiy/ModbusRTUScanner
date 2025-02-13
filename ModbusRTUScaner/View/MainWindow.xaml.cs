@@ -22,17 +22,5 @@ namespace ModbusRTUScanner
         {            
             InitializeComponent();            
         }
-
-        private void Exit_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show((this.DataContext as MainWindowViewModel).ViewManager.ScannerConsole.ConsoleOutput);
-        }
-
-
-
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-
-        }
     }
 }

@@ -25,7 +25,10 @@ namespace ModbusRTUScanner.ViewModel
         /// </summary>
         public MainWindowViewModel()
         {
-            ViewManager = new ViewModelManagerBuilder().Build(); 
+            ViewManager = new ViewModelManagerBuilder().Build();
+#if DEBUG
+            ViewManager.ScannerConsole.AddNode("Приложение запущено в DEBUG режиме");
+#endif
         }
 
 

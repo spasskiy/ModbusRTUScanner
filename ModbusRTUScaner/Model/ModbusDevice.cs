@@ -27,8 +27,10 @@ namespace ModbusRTUScanner.Model
         public int DataBits { get; init; }
         public StopBits StopBits { get; init; }
         public Parity Parity { get; init; }
+        public int ReadTimeout { get; set; }
+        public int WriteTimeout { get; set; }
 
-        public ModbusDevice(int address, string portName, int speed, int dataBits, StopBits stopBits, Parity parity)
+        public ModbusDevice(int address, string portName, int speed, int dataBits, StopBits stopBits, Parity parity, int readTimeout, int writeTimeout)
         {
             Address = (byte)address;
             PortName = portName;
@@ -36,6 +38,10 @@ namespace ModbusRTUScanner.Model
             DataBits = dataBits;
             StopBits = stopBits;
             Parity = parity;
+            ReadTimeout = readTimeout;
+            WriteTimeout = writeTimeout;
+            ReadTimeout = readTimeout;
+            WriteTimeout = writeTimeout;
         }
 
 #if DEBUG
@@ -43,12 +49,14 @@ namespace ModbusRTUScanner.Model
         {
             if (message == "DEBUG")
             {
-                Address = 10;
+                Address = 255;
                 PortName = "COM1";
-                Speed = 115200;
+                Speed = 300;
                 DataBits = 8;
                 StopBits = StopBits.One;
                 Parity = Parity.None;
+                ReadTimeout = 1000;
+                WriteTimeout = 1000;
             }
         }
 #endif
@@ -84,7 +92,9 @@ namespace ModbusRTUScanner.Model
                 Speed,      // Копируем значение Speed
                 DataBits,   // Копируем значение DataBits
                 StopBits,   // Копируем значение StopBits
-                Parity      // Копируем значение Parity
+                Parity,      // Копируем значение Parity
+                ReadTimeout, // Копируем значение ReadTimeout
+                WriteTimeout // Копируем значение WriteTimeout
             );
         }
 

@@ -63,7 +63,7 @@ namespace ModbusRTUScanner.Model
                         if (response is not null)
                         {
                             _addStringToConsole($"Получне ответ от устройства. Адрес {i}");
-                            ModbusDevice device = new ModbusDevice(i, _portManager.SelectedPort.PortName, speed.Value, _portManager.SelectedPort.DataBits, _portManager.SelectedPort.StopBits, _portManager.SelectedPort.Parity);
+                            ModbusDevice device = new ModbusDevice(i, _portManager.SelectedPort.PortName, speed.Value, _portManager.SelectedPort.DataBits, _portManager.SelectedPort.StopBits, _portManager.SelectedPort.Parity, _portManager.SelectedPort.ReadTimeout, _portManager.SelectedPort.WriteTimeout);
 
                             bool isDuplicate = _devices.Any(d => d.Equals(device));
 

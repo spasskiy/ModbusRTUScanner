@@ -25,8 +25,8 @@ namespace ModbusRTUScanner.Model
                 DataBits = device.DataBits,   // Количество бит данных
                 StopBits = device.StopBits,   // Стоповые биты
                 Parity = device.Parity,        // Четность                
-                WriteTimeout = 1000, //Тайминг записи
-                ReadTimeout = 1000 //Тайминг чтения
+                WriteTimeout = device.WriteTimeout, //Тайминг записи
+                ReadTimeout = device.ReadTimeout //Тайминг чтения
             };
 
             return serialPort;

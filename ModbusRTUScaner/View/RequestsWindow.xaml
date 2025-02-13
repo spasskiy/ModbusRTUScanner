@@ -60,13 +60,13 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Style="{DynamicResource TextBlockMenuLeft}">Скорость порта (бод):</TextBlock>
-                            <TextBox Grid.Column="1" Text="{Binding PortManager.SerialPort.BaudRate}"/>
+                            <TextBox Grid.Column="1" Text="{Binding PortManager.PortSettings.BaudRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                             <!-- Чётность -->
                             <TextBlock Grid.Row="1" Style="{DynamicResource TextBlockMenuLeft}">Чётность:</TextBlock>
                             <ComboBox Grid.Column="1" Grid.Row="1"
           ItemsSource="{Binding PortManager.SerialPortFieldsCollections.Parities}"
-          SelectedItem="{Binding PortManager.SerialPort.Parity, Mode=TwoWay}"
+          SelectedItem="{Binding PortManager.PortSettings.Parity, Mode=TwoWay}"
           HorizontalContentAlignment="Right">
                                 <ComboBox.ItemContainerStyle>
                                     <Style TargetType="ComboBoxItem">
@@ -84,7 +84,7 @@
                             <TextBlock Grid.Row="2" Style="{DynamicResource TextBlockMenuLeft}">Стоп-биты:</TextBlock>
                             <ComboBox Grid.Column="1" Grid.Row="2"
           ItemsSource="{Binding PortManager.SerialPortFieldsCollections.StopBits}"
-          SelectedItem="{Binding PortManager.SerialPort.StopBits, Mode=TwoWay}"
+          SelectedItem="{Binding PortManager.PortSettings.StopBits, Mode=TwoWay}"
           HorizontalContentAlignment="Right">
                                 <ComboBox.ItemContainerStyle>
                                     <Style TargetType="ComboBoxItem">
@@ -102,7 +102,7 @@
                             <TextBlock Grid.Row="3" Style="{DynamicResource TextBlockMenuLeft}">Длина слова:</TextBlock>
                             <ComboBox Grid.Column="1" Grid.Row="3"
           ItemsSource="{Binding PortManager.SerialPortFieldsCollections.DataBits}"
-          SelectedItem="{Binding PortManager.SerialPort.DataBits, Mode=TwoWay}"
+          SelectedItem="{Binding PortManager.PortSettings.DataBits, Mode=TwoWay}"
           HorizontalContentAlignment="Right">
                                 <ComboBox.ItemContainerStyle>
                                     <Style TargetType="ComboBoxItem">
@@ -126,9 +126,9 @@
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Style="{DynamicResource TextBlockMenuLeft}">Таймаут чтения (мс):</TextBlock>
-                                        <TextBox Grid.Column="1"  Text="{Binding PortManager.SerialPort.ReadTimeout}"/>
+                                        <TextBox Grid.Column="1"  Text="{Binding PortManager.PortSettings.ReadTimeout}"/>
                                         <TextBlock Grid.Row="1" Style="{DynamicResource TextBlockMenuLeft}">Таймаут записи (мс):</TextBlock>
-                                        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding PortManager.SerialPort.WriteTimeout}"/>
+                                        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding PortManager.PortSettings.WriteTimeout}"/>
                                     </Grid>
                                 </Expander>
                             </Grid>

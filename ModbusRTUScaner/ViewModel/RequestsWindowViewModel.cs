@@ -81,8 +81,12 @@ namespace ModbusRTUScanner.ViewModel
         {
             isNoOneExecuted = false;
 
+            
+
             try
             {
+                PortManager.PortSettings.DownloadSettingsToSerialPort(PortManager.SerialPort);
+
                 OperationStatus = OperationStatus.Waiting;
                 PortManager.Device.Address = 0;
 
@@ -111,15 +115,23 @@ namespace ModbusRTUScanner.ViewModel
             catch (TimeoutException)
             {
 #if DEBUG
-                MessageLogger.LogMessage(MessageType.Input, "03 00 07 05 08 08 0A 00 00 00 AD 0F 03 FF FF 05 7D 30 50");
+                MessageLogger.LogMessage(MessageType.Input, "0A 03 FA 00 01 01 F4 00 0A 00 08 3D CE 38 EB 00 02 00 0B 00 0A 00 0A 00 2E 00 03 00 78 00 05 00 16 C0 23 00 00 00 00 00 07 00 07 00 07 00 07 00 07 00 07 00 07 00 07 00 07 00 07 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 07 00 08 00 01 00 00 0B B8 00 00 00 0A 00 08 00 02 00 00 0B B8 00 00 00 01 00 0C 00 02 00 00 0B B8 00 00 00 08 00 08 00 04 00 00 0B B8 00 00 00 14 00 08 00 04 00 00 0B B8 00 00 00 00 00 02 00 0C 0B B8 00 03 03 E8 00 01 00 0C 0B B8 00 00 03 E8 00 01 00 0C 0B B8 00 14 03 E8 00 01 00 0C 0B B8 00 00 03 E8 00 03 00 0C 0B B8 00 03 03 E8 00 01 00 0C 0B B8 00 00 03 E8 00 1E 03 E8 01 2C 00 00 00 00 00 00 00 00 00 3C 00 00 08 58 00 00 00 00 00 00 00 00 00 1E 00 1E 50 BF");
 #else
                              ShowWarning("Превышено время ожидания ответа");
 #endif
 
             }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                ShowWarning($"{ex.Message}\nПорт не поддерживает выбранные настройки");
+            }
+            catch(System.IO.IOException ex)
+            {
+                ShowWarning($"{ex.Message}\nПорт не поддерживает выбранные настройки\nПроверьте настройки стоп бит и других параметров порта");
+            }
             catch (Exception ex)
             {
-                ShowWarning($"{ex.Message}\nПроверьте настройки порта");
+                ShowWarning($"{ex.Message}\nГлобальная ошибка\nПопробуйте перезагрузить приложение");
             }
             finally
             {
@@ -160,7 +172,7 @@ namespace ModbusRTUScanner.ViewModel
                 return Array.Empty<byte>();
             }
 
-            PortManager.SetupPort();
+            //PortManager.SetupPort();
 
             if (!PortManager.SerialPort.IsOpen)
                 PortManager.SerialPort.Open();

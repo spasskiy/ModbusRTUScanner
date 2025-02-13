@@ -232,6 +232,7 @@
                             <TreeView.ItemTemplate>
                                 <DynamicResource ResourceKey="ModbusDeviceTemplate"/>
                             </TreeView.ItemTemplate>
+                            
                         </TreeView>
                     </ScrollViewer>
                     <Grid Grid.Row="1">

@@ -18,6 +18,9 @@ namespace ModbusRTUScanner.Model.RequestsWindowModel
         //Выбранный порт
         public SerialPort SerialPort { get; set; }
 
+        public SerialPortSettings PortSettings { get; set; }
+
+
         public SerialPortFieldsCollections SerialPortFieldsCollections { get; set; }
 
         //Переданное устройство
@@ -88,6 +91,7 @@ namespace ModbusRTUScanner.Model.RequestsWindowModel
             Device = (ModbusDevice)device.Clone();
             SerialPort = new SerialPortBuilder().Build(device);
             SerialPortFieldsCollections = new();
+            PortSettings = new(SerialPort);
         }
 
         // Метод для обновления списка доступных COM-портов
