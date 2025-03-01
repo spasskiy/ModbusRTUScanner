@@ -43,7 +43,8 @@ namespace ModbusRTUScanner.Model
                 _swichIsScanRun(true);
                 _portManager.CurrentAddress = _portManager.ModbusStartAddress;
                 _addStringToConsole("Сканирование запущено");
-                foreach (var speed in _portManager.SerialPortSpeeds.Where(x => x.IsSelected).Select(x => x.PortSpeed))
+               
+                foreach (var speed in _portManager.SerialPortSpeeds.Reverse().Where(x => x.IsSelected).Select(x => x.PortSpeed))
                 {
                     if (speed is null)
                         continue;
